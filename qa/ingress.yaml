@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: zb-schools
+  name: ingress-zb-schools
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: "subnet-0dadead2553acd4c2, subnet-0c2bb4ec65fe1c3c3, subnet-00dbe4ad94510aa95"
+    alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-qa"
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-frontend-svc
+                port:
+                  number: 80
+          - path: /magnoliaPublic
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-backend-svc
+                port:
+                  number: 8080
+          - path: /authorFrontend
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-author-frontend-svc
+                port:
+                  number: 80
+          - path: /magnoliaAuthor
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-author-backend-svc
+                port:
+                  number: 8080

@@ -1,0 +1,96 @@
+---
+#PVC definition
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-public-01
+  namespace: zb-schools
+spec:
+  storageClassName: ebs-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: magnolia-public-backend
+  labels:
+    k8s.kuboard.cn/name: magnolia-public-backend
+  name: magnolia-public-backend
+  namespace: zb-schools
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
+        vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
+        vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
+        vault.hashicorp.com/log-level: "debug"
+        vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/name: magnolia-public-backend
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: CST-8
+            - name: BASE_URL
+              value: "https://sit.zbschools.sg"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
+          imagePullPolicy: Always
+          name: magolia-public
+          ports:
+            - containerPort: 8080
+              name: port8080
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: "/usr/local/tomcat/webapps/repositories_training"
+              name: public-volume
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: aws-ecr
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: service-account-sph-zb-schools
+      volumes:
+        - name: public-volume
+          persistentVolumeClaim:
+            claimName: ebs-public-01
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zb-schools
+  name: magnolia-public-backend-svc
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    k8s.kuboard.cn/name: magnolia-public-backend
