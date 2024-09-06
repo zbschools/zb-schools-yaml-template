@@ -39,7 +39,7 @@ spec:
             - /bin/bash
             - "-ce"
             - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-homework-service.jar
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
+          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
           imagePullPolicy: Always
           name: homework
           ports:
