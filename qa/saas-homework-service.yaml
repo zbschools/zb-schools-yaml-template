@@ -75,4 +75,4 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
+    k8s.kuboard.cn/name: saas-homework-service
