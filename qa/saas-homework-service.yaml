@@ -41,6 +41,11 @@ spec:
             - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-homework-service.jar
           image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
           imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "CST-8"
+            - name: RUN_ENV
+              value: "qa"
           name: homework
           ports:
             - containerPort: 8080
