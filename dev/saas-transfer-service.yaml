@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saas-transfer-service
+  namespace: zb-schools
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  template:
+    metadata:
+    spec:
+      containers:
+        - command:
+            - /bin/bash
+            - '-ce'
+            - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-transfer-service.jar
+          env:
+            - name: TZ
+              value: CST-8
+          image: 'harbor.cd.ncs.szxc.vip:64443/zb-schools/saas-transfer-service:v18'
+          imagePullPolicy: IfNotPresent
+          name: transfer
+          ports:
+            - containerPort: 8081
+              name: port8081
+              protocol: TCP
+          resources: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/name: saas-transfer-service
+  name: saas-transfer-service
+  namespace: zb-schools
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    k8s.kuboard.cn/name: saas-transfer-service
+  sessionAffinity: None
+  type: ClusterIP
