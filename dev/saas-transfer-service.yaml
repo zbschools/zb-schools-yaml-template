@@ -18,7 +18,7 @@ spec:
           env:
             - name: TZ
               value: CST-8
-          image: 'harbor.cd.ncs.szxc.vip:64443/zb-schools/saas-transfer-service:v18'
+          image: '767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service'
           imagePullPolicy: IfNotPresent
           name: transfer
           ports:
