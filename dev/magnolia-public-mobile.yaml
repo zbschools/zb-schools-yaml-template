@@ -4,9 +4,14 @@ kind: Deployment
 metadata:
   name: magnolia-public-mobile
   namespace: zb-schools
+  labels:
+    app: sph-mobile
 spec:
   replicas: 2
   template:
+    metadata:
+      labels:
+        app: sph-mobile
     spec:
       containers:
         - image: '767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile'
