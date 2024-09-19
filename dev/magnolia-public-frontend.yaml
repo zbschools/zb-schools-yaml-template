@@ -91,7 +91,7 @@ data:
             }
             
             location /lms/teacherClass {
-                proxy_pass http://homework-service:8080/teacherClass;
+                proxy_pass http://saas-homework-service-svc:8080/teacherClass;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
