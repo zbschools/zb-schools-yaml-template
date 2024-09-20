@@ -56,3 +56,10 @@ spec:
                 name: nginx-mobile
                 port:
                   number: 80
+          - path: /magnoliaPublic
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-backend-svc
+                port:
+                  number: 8080
