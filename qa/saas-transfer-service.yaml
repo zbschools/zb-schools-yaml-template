@@ -4,23 +4,30 @@ kind: Deployment
 metadata:
   name: saas-transfer-service
   namespace: zb-schools
+  labels:
+    k8s.kuboard.cn/name: saas-transfer-service
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: saas-transfer-service
   template:
     metadata:
+      labels:
+        k8s.kuboard.cn/name: saas-transfer-service
     spec:
       containers:
         - command:
             - /bin/bash
-            - '-ce'
+            - "-ce"
             - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-transfer-service.jar
           env:
             - name: TZ
               value: CST-8
             - name: RUN_ENV
-              value: "qa"
-          image: '767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service'
+              value: "dev"
+          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service"
           imagePullPolicy: IfNotPresent
           name: transfer
           ports:

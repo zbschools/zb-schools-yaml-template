@@ -5,16 +5,19 @@ metadata:
   name: magnolia-public-mobile
   namespace: zb-schools
   labels:
-    app: sph-mobile
+    k8s.kuboard.cn/name: nginx-mobile
 spec:
-  replicas: 3
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: nginx-mobile
   template:
     metadata:
       labels:
-        app: sph-mobile
+        k8s.kuboard.cn/name: nginx-mobile
     spec:
       containers:
-        - image: '767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile'
+        - image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
