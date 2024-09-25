@@ -14,7 +14,7 @@ spec:
       k8s.kuboard.cn/name: saas-transfer-service
   template:
     metadata:
-        annotations:
+      annotations:
         kubectl.kubernetes.io/restartedAt: "2024-09-25T11:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
