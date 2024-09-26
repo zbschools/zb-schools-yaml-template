@@ -10,7 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-dev"
     alb.ingress.kubernetes.io/security-groups: "sg-0c685a29fc061aac0, sg-047c915dc3f6c01e0, sg-09c7f1500155dcfd6"
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:767397694429:certificate/df7faa7f-5d7d-4a4f-a1f0-2d0ca39005ce
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:767397694429:certificate/796ce3a2-97a7-49e2-bc62-2adcaaf3215d
     alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:767397694429:regional/webacl/test/967ab707-7648-4b5b-986c-a59af4d9ab7a
 spec:
   ingressClassName: alb
