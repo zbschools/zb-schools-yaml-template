@@ -12,7 +12,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - http:
+    - host: uat.zbschools.sg
+      http:
         paths:
           - path: /
             pathType: Prefix
@@ -40,5 +41,22 @@ spec:
             backend:
               service:
                 name: magnolia-author-backend-svc
+                port:
+                  number: 8080
+    - host: m.uat.zbschools.sg
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-mobile
+                port:
+                  number: 80
+          - path: /magnoliaPublic
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-backend-svc
                 port:
                   number: 8080
