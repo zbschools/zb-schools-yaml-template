@@ -15,7 +15,7 @@ spec:
       storage: 100Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-public-backend
@@ -84,13 +84,23 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: zb-schools
+  annotations: {}
   name: magnolia-public-backend-svc
+  namespace: zb-schools
 spec:
+  clusterIP: None
+  clusterIPs:
+    - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: sts
+      port: 8080
       protocol: TCP
-  type: NodePort
+      targetPort: 8080
   selector:
     k8s.kuboard.cn/name: magnolia-public-backend
+  sessionAffinity: None
+  type: ClusterIP
