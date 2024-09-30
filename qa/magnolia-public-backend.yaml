@@ -76,10 +76,21 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       serviceAccountName: service-account-sph-zb-schools
-      volumes:
-        - name: public-volume
-          persistentVolumeClaim:
-            claimName: ebs-public-01
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      name: public-volume
+      namespace: zb-schools
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: ebs-sc
+      volumeMode: Filesystem
 ---
 apiVersion: v1
 kind: Service
