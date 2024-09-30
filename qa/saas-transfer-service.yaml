@@ -15,14 +15,13 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-09-25T11:46:16+08:00"
+        kubectl.kubernetes.io/restartedAt: "2024-06-26T11:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
         vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
-        vault.hashicorp.com/agent-inject-secret-aksk-config: "zb-schools/kv/aksk"
         vault.hashicorp.com/log-level: "debug"
-        vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
+        vault.hashicorp.com/namespace: "admin/engr/zb_schools/qa"
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: saas-transfer-service
