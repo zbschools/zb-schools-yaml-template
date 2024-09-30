@@ -49,6 +49,7 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      serviceAccountName: service-account-sph-zb-schools
 
 ---
 apiVersion: v1
