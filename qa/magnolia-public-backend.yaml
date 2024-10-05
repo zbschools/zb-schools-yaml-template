@@ -1,19 +1,4 @@
 ---
-#PVC definition
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ebs-public-01
-  namespace: zb-schools
-spec:
-  storageClassName: ebs-sc
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -25,7 +10,7 @@ metadata:
   namespace: zb-schools
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -54,7 +39,7 @@ spec:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "https://sit.zbschools.sg"
+              value: "https://uat.zbschools.sg"
           image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: Always
           name: magolia-public
@@ -91,27 +76,3 @@ spec:
           storage: 10Gi
       storageClassName: ebs-sc
       volumeMode: Filesystem
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  name: magnolia-public-backend-svc
-  namespace: zb-schools
-spec:
-  clusterIP: None
-  clusterIPs:
-    - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: sts
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    k8s.kuboard.cn/name: magnolia-public-backend
-  sessionAffinity: None
-  type: ClusterIP
