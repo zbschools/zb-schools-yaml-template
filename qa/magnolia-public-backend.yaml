@@ -76,3 +76,4 @@ spec:
           storage: 10Gi
       storageClassName: ebs-sc
       volumeMode: Filesystem
+
