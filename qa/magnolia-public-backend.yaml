@@ -73,6 +73,6 @@ spec:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 10Gi
+          storage: 20Gi
       storageClassName: ebs-sc
       volumeMode: Filesystem
