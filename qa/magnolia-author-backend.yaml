@@ -54,7 +54,7 @@ spec:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "https://sit.zbschools.sg/authorFrontend"
+              value: "https://uat.zbschools.sg/authorFrontend"
           image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:9fe35cce"
           imagePullPolicy: Always
           name: magolia-backend
