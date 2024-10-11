@@ -62,10 +62,9 @@ spec:
                 port:
                   number: 8080
           - path: /lms
-           pathType: Prefix
-           backend:
+            pathType: Prefix
+            backend:
               service:
                 name: magnolia-public-frontend-svc
                 port:
                   number: 80
-
