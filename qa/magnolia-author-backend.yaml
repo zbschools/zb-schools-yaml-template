@@ -15,7 +15,7 @@ spec:
       storage: 100Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-backend
