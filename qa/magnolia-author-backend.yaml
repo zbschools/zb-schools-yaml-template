@@ -1,19 +1,4 @@
 ---
-#PVC definition
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ebs-author-01
-  namespace: zb-schools
-spec:
-  storageClassName: ebs-sc
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -59,7 +44,13 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: '2'
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
