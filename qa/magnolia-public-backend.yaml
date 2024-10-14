@@ -18,12 +18,12 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-backend
-  serviceName: ''
+  serviceName: ""
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: '2024-06-25T17:16:12+08:00'
-        vault.hashicorp.com/agent-inject: 'true'
+        kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
+        vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
         vault.hashicorp.com/log-level: debug
@@ -38,9 +38,8 @@ spec:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: 'https://uat.zbschools.sg'
-          image: >-
-            975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend
+              value: "https://uat.zbschools.sg"
+          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: Always
           name: magolia-public
           ports:
