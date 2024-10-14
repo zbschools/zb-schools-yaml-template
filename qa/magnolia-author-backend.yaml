@@ -22,9 +22,7 @@ metadata:
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
