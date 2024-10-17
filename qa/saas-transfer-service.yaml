@@ -57,7 +57,13 @@ spec:
             - containerPort: 8081
               name: port8081
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: "4"
+              memory: 6Gi
+            requests:
+              cpu: "4"
+              memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst

@@ -36,7 +36,13 @@ spec:
             - containerPort: 80
               name: http
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: "3"
+              memory: 3Gi
+            requests:
+              cpu: "2"
+              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
