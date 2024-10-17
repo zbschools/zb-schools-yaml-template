@@ -28,8 +28,8 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: '2024-10-08T12:10:26+08:00'
-        vault.hashicorp.com/agent-inject: 'true'
+        kubectl.kubernetes.io/restartedAt: "2024-10-08T12:10:26+08:00"
+        vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
         vault.hashicorp.com/log-level: debug
@@ -42,15 +42,14 @@ spec:
       containers:
         - command:
             - /bin/bash
-            - '-ce'
+            - "-ce"
             - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-transfer-service.jar
           env:
             - name: TZ
               value: CST-8
             - name: RUN_ENV
               value: qa
-          image: >-
-            975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service:1.0.2.20241008
+          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service"
           imagePullPolicy: IfNotPresent
           name: transfer
           ports:

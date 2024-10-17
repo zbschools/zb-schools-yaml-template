@@ -55,7 +55,7 @@ spec:
               value: CST-8
             - name: BASE_URL
               value: "https://sit.zbschools.sg/authorFrontend"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:9fe35cce"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
           imagePullPolicy: Always
           name: magolia-backend
           ports:
