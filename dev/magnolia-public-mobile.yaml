@@ -24,6 +24,13 @@ spec:
             - containerPort: 80
               name: http
               protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 6Gi
+            requests:
+              cpu: "2"
+              memory: 6Gi
           volumeMounts:
             - mountPath: /etc/nginx/conf.d/default.conf
               name: volume-conf

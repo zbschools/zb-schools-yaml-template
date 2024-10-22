@@ -62,7 +62,13 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              cpu: "2"
+              memory: 6Gi
+            requests:
+              cpu: "2"
+              memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
