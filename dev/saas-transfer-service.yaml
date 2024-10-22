@@ -8,7 +8,7 @@ metadata:
     k8s.kuboard.cn/name: saas-transfer-service
 spec:
   progressDeadlineSeconds: 600
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       k8s.kuboard.cn/name: saas-transfer-service
