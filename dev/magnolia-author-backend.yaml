@@ -50,8 +50,6 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: "/usr/local/tomcat/webapps/repositories_training-old"
-              name: author-volume-old
             - mountPath: "/usr/local/tomcat/webapps/repositories_training"
               name: author-volume
       dnsPolicy: ClusterFirst
@@ -63,29 +61,13 @@ spec:
       terminationGracePeriodSeconds: 30
       serviceAccountName: service-account-sph-zb-schools
       volumes:
-        - name: author-volume-old
+        - name: author-volume
           persistentVolumeClaim:
             claimName: ebs-author-01
   updateStrategy:
     rollingUpdate:
       partition: 0
     type: RollingUpdate
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        creationTimestamp: null
-        name: author-volume
-        namespace: zb-schools
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 20Gi
-        storageClassName: ebs-sc
-        volumeMode: Filesystem
-      status:
         phase: Pending  
 ---
 apiVersion: v1
