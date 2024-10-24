@@ -63,7 +63,7 @@ spec:
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
-      restartPolicy: Always
+      restartPolicy: IfNotPresent
       schedulerName: default-scheduler
       securityContext: {}
       serviceAccount: service-account-sph-zb-schools
