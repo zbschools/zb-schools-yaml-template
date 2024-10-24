@@ -108,7 +108,6 @@ data:
                     root /usr/share/nginx/html;
                     index index.html;
                     expires -1;
-                    add_header Cache-Control "private, max-age=0";
                     client_max_body_size 1000m;
                     try_files $uri $uri/ /index.html @rewrites;
 
