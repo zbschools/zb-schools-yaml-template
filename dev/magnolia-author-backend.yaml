@@ -15,7 +15,7 @@ spec:
       storage: 100Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-backend
@@ -24,17 +24,10 @@ metadata:
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
-  progressDeadlineSeconds: 600
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -86,6 +79,10 @@ spec:
         - name: author-volume
           persistentVolumeClaim:
             claimName: ebs-author-01
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
 ---
 apiVersion: v1
 kind: Service
