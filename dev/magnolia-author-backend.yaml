@@ -1,19 +1,4 @@
 ---
-#PVC definition
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ebs-author-01
-  namespace: zb-schools
-spec:
-  storageClassName: ebs-sc
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
