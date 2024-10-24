@@ -68,7 +68,6 @@ spec:
     rollingUpdate:
       partition: 0
     type: RollingUpdate
-        phase: Pending  
 ---
 apiVersion: v1
 kind: Service
