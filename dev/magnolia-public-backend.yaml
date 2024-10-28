@@ -39,6 +39,10 @@ spec:
               value: CST-8
             - name: BASE_URL
               value: "https://sit.zbschools.sg"
+            - name: ENV_TYPE
+              value: "sit"
+            - name: INSTANCE_TYPE
+              value: "magnoliaPublic"
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-public
