@@ -139,6 +139,15 @@ data:
                   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                   proxy_set_header X-Forwarded-Proto $scheme;
             }
+
+            location /lms/file/getMagnoliaRedirectUrl {
+                  proxy_pass http://saas-homework-service-svc:8080/file/getMagnoliaRedirectUrl;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
             location /lms/yd/textToSpeech {
                   proxy_pass http://saas-homework-service-svc:8080/yd/textToSpeech;
                   proxy_set_header Host $host;
