@@ -31,6 +31,10 @@ spec:
         - env:
             - name: TZ
               value: CST-8
+            - name: ENV_TYPE
+              value: "qa"
+            - name: INSTANCE_TYPE
+              value: "magnoliaAuthor"
             - name: BASE_URL
               value: "https://uat.zbschools.sg/authorFrontend"
           image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
