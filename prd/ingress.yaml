@@ -1,0 +1,70 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: zb-schools
+  name: ingress-zb-schools
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: "subnet-042846e2cf598d378, subnet-00b8c5f4e5889bc2a, subnet-085e7be1fc5e5e0b7"
+    alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-prd"
+    alb.ingress.kubernetes.io/security-groups: "sg-09f502a8ba4bef043, sg-04d7eb341d98178af, sg-0e118d8a7229274e5"
+    alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true
+spec:
+  ingressClassName: alb
+  rules:
+    - host: uat.zbschools.sg
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-frontend-svc
+                port:
+                  number: 80
+          - path: /magnoliaPublic
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-backend-svc
+                port:
+                  number: 8080
+          - path: /authorFrontend
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-author-frontend-svc
+                port:
+                  number: 80
+          - path: /magnoliaAuthor
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-author-backend-svc
+                port:
+                  number: 8080
+    - host: m.uat.zbschools.sg
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-mobile
+                port:
+                  number: 80
+          - path: /magnoliaPublic
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-backend-svc
+                port:
+                  number: 8080
+          - path: /lms
+            pathType: Prefix
+            backend:
+              service:
+                name: magnolia-public-frontend-svc
+                port:
+                  number: 80
