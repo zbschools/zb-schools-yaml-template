@@ -59,9 +59,6 @@ spec:
               memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /usr/local/tomcat/webapps/repositories_training
-              name: public-volume
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -75,23 +72,6 @@ spec:
     rollingUpdate:
       partition: 0
     type: RollingUpdate
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        creationTimestamp: null
-        name: public-volume
-        namespace: zb-schools
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
-        storageClassName: ebs-sc
-        volumeMode: Filesystem
-      status:
-        phase: Pending
 ---
 apiVersion: v1
 kind: Service
