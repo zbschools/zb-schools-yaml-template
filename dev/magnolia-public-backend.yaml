@@ -163,5 +163,8 @@ spec:
       targetPort: 8080
   selector:
     statefulset.kubernetes.io/pod-name: magnolia-public-backend-2
-  sessionAffinity: None
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
   type: ClusterIP

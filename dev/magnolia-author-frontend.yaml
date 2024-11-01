@@ -107,3 +107,7 @@ spec:
   type: NodePort
   selector:
     k8s.kuboard.cn/name: magnolia-author-frontend
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
