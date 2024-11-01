@@ -13,6 +13,9 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:767397694429:certificate/796ce3a2-97a7-49e2-bc62-2adcaaf3215d
     alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:767397694429:regional/webacl/zb-schools-dev-ingress-alb-wafv2/76d440b1-367f-4939-a4ef-11d0763e7b2c
+    alb.ingress.kubernetes.io/affinity: "cookie"
+    alb.ingress.kubernetes.io/affinity-mode: "persistent"
+    alb.ingress.kubernetes.io/session-cookie-name: "SESSION"
 spec:
   ingressClassName: alb
   rules:
