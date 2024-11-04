@@ -83,7 +83,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-mobile
+  name: magnolia-public-mobile-svc
   namespace: zb-schools
 spec:
   ports:
