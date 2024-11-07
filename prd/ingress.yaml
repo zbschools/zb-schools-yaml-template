@@ -10,6 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-prd"
     alb.ingress.kubernetes.io/security-groups: "sg-09f502a8ba4bef043, sg-04d7eb341d98178af, sg-0e118d8a7229274e5"
     alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,access_logs.s3.enabled=true,access_logs.s3.bucket=s3-sph-zb-schools-prd-access-log-bucket
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:905418451605:regional/webacl/zb-schools-prd-ingress-alb-wafv2/5eef52cd-e78a-48fa-9c20-38e778669a44
 spec:
   ingressClassName: alb
   rules:
