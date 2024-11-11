@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-backend
@@ -13,6 +13,11 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -44,9 +49,20 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: >-
+                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           resources:
             limits:
-              cpu: "1.2"
+              cpu: "1"
               memory: 6Gi
             requests:
               cpu: "1"
@@ -61,10 +77,6 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       serviceAccountName: service-account-sph-zb-schools
-  updateStrategy:
-    rollingUpdate:
-      partition: 0
-    type: RollingUpdate
 ---
 apiVersion: v1
 kind: Service
