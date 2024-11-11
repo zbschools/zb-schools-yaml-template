@@ -9,6 +9,7 @@ metadata:
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
+  progressDeadlineSeconds: 600
   replicas: 2
   selector:
     matchLabels:
