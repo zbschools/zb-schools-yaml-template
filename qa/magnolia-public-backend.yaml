@@ -9,16 +9,16 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Retain
-    whenScaled: Retain
-  podManagementPolicy: OrderedReady
-  replicas: 1
+  replicas: 2
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-backend
-  serviceName: ""
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -50,6 +50,17 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: >-
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           resources:
             limits:
               cpu: '6'
@@ -68,10 +79,6 @@ spec:
       serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
       terminationGracePeriodSeconds: 30
-  updateStrategy:
-    rollingUpdate:
-      partition: 0
-    type: RollingUpdate
 ---
 apiVersion: v1
 kind: Service
@@ -93,75 +100,5 @@ spec:
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
-      timeoutSeconds: 10800
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  name: magnolia-public-backend-svc-0
-  namespace: zb-schools
-spec:
-  clusterIP: None
-  clusterIPs:
-    - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: port0
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    statefulset.kubernetes.io/pod-name: magnolia-public-backend-0
-  sessionAffinity: None
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: magnolia-public-backend-svc-1
-  namespace: zb-schools
-spec:
-  clusterIP: None
-  clusterIPs:
-    - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: port0
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    statefulset.kubernetes.io/pod-name: magnolia-public-backend-1
-  sessionAffinity: None
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: magnolia-public-backend-svc-2
-  namespace: zb-schools
-spec:
-  clusterIP: None
-  clusterIPs:
-    - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: port0
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    statefulset.kubernetes.io/pod-name: magnolia-public-backend-2
-  sessionAffinity: None
+      timeoutSeconds: 3600
   type: ClusterIP
