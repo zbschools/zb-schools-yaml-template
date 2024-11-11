@@ -9,7 +9,6 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  progressDeadlineSeconds: 600
   replicas: 2
   revisionHistoryLimit: 10
   selector:
@@ -51,17 +50,6 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 30
-            httpGet:
-              path: >-
-                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 120
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           resources:
             limits:
               cpu: "1"
