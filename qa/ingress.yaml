@@ -5,7 +5,7 @@ metadata:
   name: ingress-zb-schools
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-group-attributes: 'stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600'
+    alb.ingress.kubernetes.io/target-group-attributes: 'stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/subnets: "subnet-0dadead2553acd4c2, subnet-0c2bb4ec65fe1c3c3, subnet-00dbe4ad94510aa95"
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-qa"

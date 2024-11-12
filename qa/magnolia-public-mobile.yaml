@@ -125,4 +125,8 @@ spec:
       targetPort: 80
   selector:
     k8s.kuboard.cn/name: nginx-mobile
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 86400
   type: ClusterIP

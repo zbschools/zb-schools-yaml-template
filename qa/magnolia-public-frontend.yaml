@@ -196,4 +196,4 @@ spec:
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
-      timeoutSeconds: 3600
+      timeoutSeconds: 86400
