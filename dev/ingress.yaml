@@ -6,6 +6,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
     alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,access_logs.s3.enabled=true,access_logs.s3.bucket=s3-sph-zb-schools-dev-access-log-bucket
     alb.ingress.kubernetes.io/subnets: "subnet-07ba408e3b3814115, subnet-024dd3663cbeca60b, subnet-0689fa37eab75f700"
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-dev"
