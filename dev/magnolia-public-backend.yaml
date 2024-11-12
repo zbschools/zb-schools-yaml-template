@@ -100,5 +100,5 @@ spec:
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
-      timeoutSeconds: 10800
+      timeoutSeconds: 3600
   type: ClusterIP
