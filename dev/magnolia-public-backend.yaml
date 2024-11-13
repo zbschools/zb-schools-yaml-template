@@ -127,6 +127,6 @@ spec:
       targetPort: 8080
   selector:
     k8s.kuboard.cn/name: magnolia-public-backend
-    pod-name:  magnolia-public-backend-0
+    statefulset.kubernetes.io/pod-name:  magnolia-public-backend-0
   type: ClusterIP
 

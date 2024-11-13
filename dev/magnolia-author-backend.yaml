@@ -116,4 +116,4 @@ spec:
   type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-author-backend
-    pod-name: magnolia-author-backend-0
+    statefulset.kubernetes.io/pod-name: magnolia-author-backend-0
