@@ -9,6 +9,11 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
   replicas: 2
   revisionHistoryLimit: 10
   selector:
@@ -113,3 +118,24 @@ spec:
     clientIP:
       timeoutSeconds: 86400
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc-0
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    k8s.kuboard.cn/name: magnolia-public-backend
+    pod-name:  magnolia-public-backend-0
+  type: ClusterIP
+

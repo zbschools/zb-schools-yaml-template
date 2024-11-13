@@ -1,50 +1,51 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
-    k8s.kuboard.cn/workload: magnolia-author-backend
+    k8s.kuboard.cn/workload: magnolia-public-backend
   labels:
-    k8s.kuboard.cn/name: magnolia-author-backend
-  name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-public-backend
+  name: magnolia-public-backend
   namespace: zb-schools
 spec:
   replicas: 2
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-backend
-  podManagementPolicy: OrderedReady
-  updateStrategy:
+      k8s.kuboard.cn/name: magnolia-public-backend
+  strategy:
     rollingUpdate:
-      partition: 0
+      maxSurge: 25%
+      maxUnavailable: 25%
     type: RollingUpdate
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:41:20+08:00"
+        kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
-        vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
-        vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
-        vault.hashicorp.com/log-level: "debug"
-        vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
+        vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
+        vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
+        vault.hashicorp.com/log-level: debug
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/dev
+        vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend
+        k8s.kuboard.cn/name: magnolia-public-backend
     spec:
       containers:
         - env:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "https://sit.zbschools.sg/authorFrontend"
+              value: "https://sit.zbschools.sg"
             - name: ENV_TYPE
               value: "sit"
             - name: INSTANCE_TYPE
-              value: "magnoliaAuthor"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
+              value: "magnoliaPublic"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: IfNotPresent
-          name: magolia-backend
+          name: magolia-public
           ports:
             - containerPort: 8080
               name: port8080
@@ -53,7 +54,7 @@ spec:
             failureThreshold: 30
             httpGet:
               path: >-
-                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 120
@@ -86,38 +87,29 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      terminationGracePeriodSeconds: 30
+      serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
+      terminationGracePeriodSeconds: 30
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: magnolia-public-backend-svc
   namespace: zb-schools
-  name: magnolia-author-backend-svc
 spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: public
+      port: 8080
       protocol: TCP
-  type: NodePort
+      targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-public-backend
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
       timeoutSeconds: 86400
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: zb-schools
-  name: magnolia-author-backend-svc-0
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-      protocol: TCP
   type: ClusterIP
-  selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
-    pod-name: magnolia-author-backend-0
