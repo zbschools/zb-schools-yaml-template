@@ -14,10 +14,6 @@ spec:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
   podManagementPolicy: OrderedReady
-  updateStrategy:
-    rollingUpdate:
-      partition: 0
-    type: RollingUpdate
   template:
     metadata:
       annotations:

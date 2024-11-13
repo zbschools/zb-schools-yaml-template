@@ -10,10 +10,6 @@ metadata:
   namespace: zb-schools
 spec:
   podManagementPolicy: OrderedReady
-  updateStrategy:
-    rollingUpdate:
-      partition: 0
-    type: RollingUpdate
   replicas: 2
   revisionHistoryLimit: 10
   selector:
