@@ -1,43 +1,4 @@
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: public-s3-pv
-spec:
-  capacity:
-    storage: 100Gi # ignored, required
-  accessModes:
-    - ReadWriteMany # supported options: ReadWriteMany / ReadOnlyMany
-  storageClassName: "" # Required for static provisioning
-  claimRef: # To ensure no other PVCs can claim this PV
-    namespace: zb-schools # Namespace is required even though it's in "default" namespace.
-    name: public-s3-pv # Name of your PVC
-  mountOptions:
-    - allow-delete
-    - region ap-southeast-1
-    - prefix public/
-    - sse aws:kms # Use customer managed KMS key for server side encryption
-    - sse-kms-key-id arn:aws:kms:ap-southeast-1:767397694429:key/c78efda0-5009-4e39-a1ff-7e92aa94e651 # set key id (optional)
-  csi:
-    driver: s3.csi.aws.com # required
-    volumeHandle: s3-csi-driver-volume
-    volumeAttributes:
-      bucketName: s3-sph-zb-schools-dev-magnolia-share
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: public-s3-pv
-  namespace: zb-schools
-spec:
-  accessModes:
-    - ReadWriteMany # Supported options: ReadWriteMany / ReadOnlyMany
-  storageClassName: "" # Required for static provisioning
-  resources:
-    requests:
-      storage: 100Gi # Ignored, required
-  volumeName: public-s3-pv # Name of your PV
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -68,10 +29,6 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
     spec:
-      volumes:
-        - name: persistent-storage
-          persistentVolumeClaim:
-            claimName: public-s3-pv
       containers:
         - env:
             - name: TZ
@@ -85,9 +42,6 @@ spec:
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-public
-          volumeMounts:
-            - name: persistent-storage
-              mountPath: /share-data
           ports:
             - containerPort: 8080
               name: port8080
@@ -161,6 +115,25 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-public-backend
-    statefulset.kubernetes.io/pod-name: magnolia-public-backend-0
+    statefulset.kubernetes.io/pod-name:  magnolia-public-backend-0
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc-1
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    statefulset.kubernetes.io/pod-name:  magnolia-public-backend-1
+  type: ClusterIP
+
