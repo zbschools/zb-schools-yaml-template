@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: author-s3-pv
+  name: public-s3-pv
 spec:
   capacity:
     storage: 100Gi # ignored, required
@@ -11,11 +11,11 @@ spec:
   storageClassName: "" # Required for static provisioning
   claimRef: # To ensure no other PVCs can claim this PV
     namespace: zb-schools # Namespace is required even though it's in "default" namespace.
-    name: author-s3-pv # Name of your PVC
+    name: public-s3-pv # Name of your PVC
   mountOptions:
     - allow-delete
     - region ap-southeast-1
-    - prefix author/
+    - prefix public/
     - sse aws:kms # Use customer managed KMS key for server side encryption
     - sse-kms-key-id arn:aws:kms:ap-southeast-1:767397694429:key/c78efda0-5009-4e39-a1ff-7e92aa94e651 # set key id (optional)
   csi:
@@ -27,7 +27,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: author-s3-pv
+  name: public-s3-pv
   namespace: zb-schools
 spec:
   accessModes:
@@ -36,58 +36,55 @@ spec:
   resources:
     requests:
       storage: 100Gi # Ignored, required
-  volumeName: author-s3-pv # Name of your PV
+  volumeName: public-s3-pv # Name of your PV
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
-    k8s.kuboard.cn/workload: magnolia-author-backend
+    k8s.kuboard.cn/workload: magnolia-public-backend
   labels:
-    k8s.kuboard.cn/name: magnolia-author-backend
-  name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-public-backend
+  name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  replicas: 1
+  podManagementPolicy: OrderedReady
+  replicas: 2
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      k8s.kuboard.cn/name: magnolia-public-backend
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:41:20+08:00"
+        kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
-        vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
-        vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
-        vault.hashicorp.com/log-level: "debug"
-        vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
+        vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
+        vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
+        vault.hashicorp.com/log-level: debug
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/dev
+        vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend
+        k8s.kuboard.cn/name: magnolia-public-backend
     spec:
       volumes:
         - name: persistent-storage
           persistentVolumeClaim:
-            claimName: author-s3-pv
+            claimName: public-s3-pv
       containers:
         - env:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "https://sit.zbschools.sg/authorFrontend"
+              value: "https://sit.zbschools.sg"
             - name: ENV_TYPE
               value: "sit"
             - name: INSTANCE_TYPE
-              value: "magnoliaAuthor"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
+              value: "magnoliaPublic"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: IfNotPresent
-          name: magolia-backend
+          name: magolia-public
           volumeMounts:
             - name: persistent-storage
               mountPath: /share-data
@@ -99,7 +96,7 @@ spec:
             failureThreshold: 30
             httpGet:
               path: >-
-                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 120
@@ -121,53 +118,68 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      terminationGracePeriodSeconds: 30
+      serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
+      terminationGracePeriodSeconds: 30
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: magnolia-public-backend-svc
   namespace: zb-schools
-  name: magnolia-author-backend-svc
 spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: public
+      port: 8080
       protocol: TCP
-  type: ClusterIP
+      targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-public-backend
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
       timeoutSeconds: 86400
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: magnolia-public-backend-svc-0
   namespace: zb-schools
-  name: magnolia-author-backend-svc-0
 spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: public
+      port: 8080
       protocol: TCP
-  type: ClusterIP
+      targetPort: 8080
   selector:
-    statefulset.kubernetes.io/pod-name: magnolia-author-backend-0
-  sessionAffinity: ClientIP
+    statefulset.kubernetes.io/pod-name: magnolia-public-backend-0
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: magnolia-public-backend-svc-1
   namespace: zb-schools
-  name: magnolia-author-backend-svc-1
 spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: public
+      port: 8080
       protocol: TCP
-  type: ClusterIP
+      targetPort: 8080
   selector:
-    statefulset.kubernetes.io/pod-name: magnolia-author-backend-1 
-  sessionAffinity: ClientIP
+    statefulset.kubernetes.io/pod-name: magnolia-public-backend-1
+  type: ClusterIP
+
