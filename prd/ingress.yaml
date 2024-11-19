@@ -52,7 +52,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nginx-mobile
+                name: magnolia-public-mobile-svc
                 port:
                   number: 80
           - path: /magnoliaPublic
