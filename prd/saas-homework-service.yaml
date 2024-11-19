@@ -53,10 +53,10 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: "2"
+              cpu: "4"
               memory: 6Gi
             requests:
-              cpu: "2"
+              cpu: "4"
               memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
