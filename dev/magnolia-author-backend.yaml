@@ -48,7 +48,7 @@ metadata:
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
@@ -91,17 +91,6 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 30
-            httpGet:
-              path: >-
-                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 120
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           resources:
             limits:
               cpu: "1"
