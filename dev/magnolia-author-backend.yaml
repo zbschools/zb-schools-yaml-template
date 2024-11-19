@@ -86,7 +86,7 @@ spec:
           name: magolia-backend
           volumeMounts:
             - name: persistent-storage
-              mountPath: /usr/local/tomcat/webapps/repositories_training/magnolia
+              mountPath: /share-data
           ports:
             - containerPort: 8080
               name: port8080
