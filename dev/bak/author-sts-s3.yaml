@@ -86,22 +86,11 @@ spec:
           name: magolia-backend
           volumeMounts:
             - name: persistent-storage
-              mountPath: /share-data
+              mountPath: /mnt
           ports:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 30
-            httpGet:
-              path: >-
-                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 120
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           resources:
             limits:
               cpu: "1"
