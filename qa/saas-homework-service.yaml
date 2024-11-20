@@ -39,7 +39,7 @@ spec:
             - /bin/bash
             - "-ce"
             - java  -Xms2048m -Xmx2048m -Dnewrelic.environment=uat -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar
-          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
+          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
           imagePullPolicy: Always
           env:
             - name: TZ
