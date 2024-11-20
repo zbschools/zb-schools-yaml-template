@@ -28,7 +28,7 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       containers:
-        - image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
+        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: Always
           name: nginx
           ports:
@@ -61,7 +61,7 @@ spec:
             items:
               - key: default.conf
                 path: default.conf
-            name: nginx2-conf
+            name: public-nginx-conf
           name: volume-2hfc3
 ---
 apiVersion: v1
@@ -177,7 +177,7 @@ kind: ConfigMap
 metadata:
   annotations: {}
   labels: {}
-  name: nginx2-conf
+  name: public-nginx-conf
   namespace: zb-schools
 ---
 apiVersion: v1
@@ -190,7 +190,7 @@ spec:
     - port: 80
       targetPort: 80
       protocol: TCP
-  type: NodePort
+  type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-public-frontend
   sessionAffinity: ClientIP
