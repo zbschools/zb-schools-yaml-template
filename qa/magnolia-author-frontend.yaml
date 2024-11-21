@@ -29,7 +29,7 @@ spec:
         k8s.kuboard.cn/name: magnolia-author-frontend
     spec:
       containers:
-        - image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
+        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
           imagePullPolicy: Always
           name: magnolia-author-frontend
           ports:

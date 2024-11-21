@@ -17,7 +17,7 @@ spec:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
       containers:
-        - image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
+        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:

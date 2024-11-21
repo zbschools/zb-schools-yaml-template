@@ -43,7 +43,7 @@ spec:
               value: "magnoliaPublic"
             - name: BASE_URL
               value: "https://uat.zbschools.sg"
-          image: "975050283759.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
+          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: Always
           name: magolia-public
           ports:
