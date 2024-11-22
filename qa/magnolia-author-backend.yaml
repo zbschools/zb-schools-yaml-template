@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-backend
@@ -13,11 +13,7 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  podManagementPolicy: OrderedReady
   template:
     metadata:
       annotations:
