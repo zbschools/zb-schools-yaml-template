@@ -44,7 +44,7 @@ spec:
             items:
               - key: nginx-mobile.conf
                 path: default.conf
-            name: nginx-conf-mobile
+            name: mobile-nginx-conf
           name: volume-conf
 
 ---
@@ -109,7 +109,7 @@ kind: ConfigMap
 metadata:
   annotations: {}
   labels: {}
-  name: nginx-conf-mobile
+  name: mobile-nginx-conf
   namespace: zb-schools
 ---
 apiVersion: v1

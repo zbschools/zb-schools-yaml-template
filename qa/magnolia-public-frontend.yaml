@@ -106,7 +106,7 @@ data:
             client_max_body_size 100M;
 
             location / {
-                    root /usr/share/nginx/html;
+                    root /usr/share/nginx/html/qa;
                     index index.html;
                     expires -1;
                     client_max_body_size 1000m;
