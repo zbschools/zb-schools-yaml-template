@@ -44,13 +44,21 @@ spec:
             - containerPort: 8081
               name: port8081
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 50
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8081
+            timeoutSeconds: 2
           resources:
             limits:
-              cpu: "1.2"
-              memory: 6Gi
+              cpu: "1"
+              memory: 4Gi
             requests:
               cpu: "1"
-              memory: 6Gi
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
