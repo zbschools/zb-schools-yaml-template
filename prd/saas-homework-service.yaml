@@ -51,6 +51,14 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 2
           resources:
             limits:
               cpu: "4"

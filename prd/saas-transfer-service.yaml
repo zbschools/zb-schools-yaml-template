@@ -44,6 +44,14 @@ spec:
             - containerPort: 8081
               name: port8081
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8081
+            timeoutSeconds: 2
           resources:
             limits:
               cpu: "4"
