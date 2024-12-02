@@ -6,7 +6,7 @@ metadata:
     k8s.kuboard.cn/workload: magnolia-public-frontend
   labels:
     k8s.kuboard.cn/name: magnolia-public-frontend
-  name: magnolia-public-frontend-node
+  name: magnolia-public-frontend
   namespace: zb-schools
 spec:
   progressDeadlineSeconds: 600
