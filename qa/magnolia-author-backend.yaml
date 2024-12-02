@@ -84,7 +84,7 @@ spec:
     - port: 8080
       targetPort: 8080
       protocol: TCP
-  type: NodePort
+  type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-author-backend
   sessionAffinity: ClientIP
