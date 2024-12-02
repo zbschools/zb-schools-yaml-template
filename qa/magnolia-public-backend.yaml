@@ -98,3 +98,60 @@ spec:
     clientIP:
       timeoutSeconds: 86400
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc-0
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    statefulset.kubernetes.io/pod-name: magnolia-public-backend-0
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc-1
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    statefulset.kubernetes.io/pod-name: magnolia-public-backend-1
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc-2
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    statefulset.kubernetes.io/pod-name: magnolia-public-backend-2
+  type: ClusterIP
