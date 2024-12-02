@@ -70,7 +70,7 @@ spec:
             items:
               - key: default.conf
                 path: default.conf
-            name: nginx2-conf
+            name: public-nginx-conf
           name: volume-2hfc3
 ---
 apiVersion: v1
@@ -190,7 +190,7 @@ kind: ConfigMap
 metadata:
   annotations: {}
   labels: {}
-  name: nginx2-conf
+  name: public-nginx-conf
   namespace: zb-schools
 ---
 apiVersion: v1

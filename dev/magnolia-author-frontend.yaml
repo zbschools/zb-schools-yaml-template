@@ -70,7 +70,7 @@ spec:
             items:
               - key: default.conf
                 path: default.conf
-            name: nginx1-conf
+            name: author-nginx-conf
           name: confd
 ---
 apiVersion: v1
@@ -99,7 +99,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  name: nginx1-conf
+  name: author-nginx-conf
   namespace: zb-schools
 ---
 apiVersion: v1
