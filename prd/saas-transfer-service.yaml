@@ -76,7 +76,7 @@ metadata:
   annotations: {}
   labels:
     k8s.kuboard.cn/name: saas-transfer-service
-  name: saas-transfer-service-svc
+  name: saas-transfer-service
   namespace: zb-schools
 spec:
   ports:
