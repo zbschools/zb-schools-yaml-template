@@ -46,6 +46,13 @@ spec:
                 name: magnolia-author-backend-svc
                 port:
                   number: 8080
+          - backend:
+              service:
+                name: saas-homework-service-svc
+                port:
+                  number: 8080
+            path: /data/test
+            pathType: Prefix
     - host: m.uat.zbschools.sg
       http:
         paths:
