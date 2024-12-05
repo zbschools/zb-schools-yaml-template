@@ -13,7 +13,7 @@ magnolia-public-backend:
 
 
 
-prd-deploy: 2024-11-27
+prd-deploy: 2024-12-02
 ============================================
 magnolia-author-frontend:1.0.32.20241126
 magnolia-public-frontend:3.0.0.20241127    +
