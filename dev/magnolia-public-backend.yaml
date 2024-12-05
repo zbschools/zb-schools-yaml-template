@@ -9,7 +9,6 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  podManagementPolicy: OrderedReady
   replicas: 1
   revisionHistoryLimit: 10
   selector:
