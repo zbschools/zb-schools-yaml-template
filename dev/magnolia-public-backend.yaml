@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-public-backend
@@ -34,7 +34,7 @@ spec:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "https://sit.zbschools.sg"
+              value: "http://sit.zbschools.sg"
             - name: ENV_TYPE
               value: "sit"
             - name: INSTANCE_TYPE

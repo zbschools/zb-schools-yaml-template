@@ -1,6 +1,6 @@
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-backend
@@ -13,7 +13,6 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-author-backend
-  podManagementPolicy: OrderedReady
   template:
     metadata:
       annotations:
@@ -58,10 +57,10 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "1"
+              cpu: "3"
               memory: 6Gi
             requests:
-              cpu: "1"
+              cpu: "3"
               memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
