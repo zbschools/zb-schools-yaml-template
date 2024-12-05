@@ -34,7 +34,7 @@ spec:
             - name: TZ
               value: CST-8
             - name: BASE_URL
-              value: "http://sit.zbschools.sg"
+              value: "https://sit.zbschools.sg"
             - name: ENV_TYPE
               value: "sit"
             - name: INSTANCE_TYPE
