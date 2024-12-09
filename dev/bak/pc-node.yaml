@@ -3,10 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    k8s.kuboard.cn/workload: magnolia-public-frontend
+    k8s.kuboard.cn/workload: frontend-nodetest
   labels:
-    k8s.kuboard.cn/name: magnolia-public-frontend
-  name: magnolia-public-frontend
+    k8s.kuboard.cn/name: frontend-nodetest
+  name: frontend-nodetest
   namespace: zb-schools
 spec:
   progressDeadlineSeconds: 600
@@ -26,7 +26,7 @@ spec:
         kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-public-frontend
+        k8s.kuboard.cn/name: frontend-nodetest
     spec:
       containers:
         - command:
