@@ -14,7 +14,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: frontend-nodetest 
+      k8s.kuboard.cn/name: magnolia-public-frontend
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -29,13 +29,9 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       containers:
-        - command:
-            - tail
-            - '-f'
-            - /dev/null
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
-          imagePullPolicy: IfNotPresent
-          name: frontend
+        - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
+          imagePullPolicy: Always
+          name: nginx
           ports:
             - containerPort: 80
               name: http
@@ -74,7 +70,7 @@ spec:
             items:
               - key: default.conf
                 path: default.conf
-            name: public-nginx-conf2
+            name: public-nginx-conf
           name: volume-2hfc3
 ---
 apiVersion: v1
