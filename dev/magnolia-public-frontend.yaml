@@ -3,10 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    k8s.kuboard.cn/workload: frontend-nodetest
+    k8s.kuboard.cn/workload: magnolia-public-frontend
   labels:
-    k8s.kuboard.cn/name: frontend-nodetest
-  name: frontend-nodetest
+    k8s.kuboard.cn/name: magnolia-public-frontend
+  name: magnolia-public-frontend
   namespace: zb-schools
 spec:
   progressDeadlineSeconds: 600
@@ -14,7 +14,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: frontend-nodetest 
+      k8s.kuboard.cn/name: magnolia-public-frontend
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -26,20 +26,24 @@ spec:
         kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: frontend-nodetest
+        k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       containers:
-        - command:
-            - tail
-            - '-f'
-            - /dev/null
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
-          imagePullPolicy: IfNotPresent
-          name: frontend
+        - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
+          imagePullPolicy: Always
+          name: nginx
           ports:
             - containerPort: 80
               name: http
               protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 50
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 2
           resources:
             limits:
               cpu: "1"
@@ -66,7 +70,7 @@ spec:
             items:
               - key: default.conf
                 path: default.conf
-            name: public-nginx-conf2
+            name: public-nginx-conf
           name: volume-2hfc3
 ---
 apiVersion: v1
