@@ -38,7 +38,7 @@ spec:
         - command:
             - /bin/bash
             - "-ce"
-            - java  -Xms2048m -Xmx2048m -Dnewrelic.environment=prd -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar
+            - java  -Dnewrelic.environment=prd -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar -server.tomcat.max-threads=600
           image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
           imagePullPolicy: IfNotPresent
           env:
