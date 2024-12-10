@@ -1,15 +1,15 @@
 prd-image-repo
 905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/
 
-prd-deploy: 2024-12-
+prd-deploy: 2024-12-12
 ============================================
-magnolia-author-frontend:
-magnolia-public-frontend:
-sph-mobile:
-saas-homework-service:
-saas-transfer-service:
-magnolia-author-backend:
-magnolia-public-backend:
+magnolia-author-frontend:1.0.34.20241209  +
+magnolia-public-frontend:1.0.99.20241210  +
+sph-mobile:1.0.52.20241210                +
+saas-homework-service:1.0.70.20241210     +
+saas-transfer-service:1.0.40.20241121
+magnolia-author-backend:1.0.86.20241210   +
+magnolia-public-backend:1.0.63.20241210   +
 
 
 
