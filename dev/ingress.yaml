@@ -70,3 +70,13 @@ spec:
                 name: magnolia-public-frontend-svc
                 port:
                   number: 80
+    - host: sitadmin.zbschools.sg
+      http:
+        paths:
+          - backend:
+              service:
+                name: magnolia-public-frontend-svc
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
