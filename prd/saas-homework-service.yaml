@@ -38,7 +38,7 @@ spec:
         - command:
             - /bin/bash
             - "-ce"
-            - java  -Dnewrelic.environment=prd -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar -server.tomcat.max-threads=600
+            - java  -Xms2g -Xmx4g -Dnewrelic.environment=prd -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar -server.tomcat.max-threads=1500
           image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-homework-service"
           imagePullPolicy: IfNotPresent
           env:
@@ -62,10 +62,10 @@ spec:
           resources:
             limits:
               cpu: "4"
-              memory: 6Gi
+              memory: 8Gi
             requests:
               cpu: "4"
-              memory: 6Gi
+              memory: 8Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
