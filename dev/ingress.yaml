@@ -75,8 +75,8 @@ spec:
         paths:
           - backend:
               service:
-                name: magnolia-public-frontend-svc
+                name: magnolia-public-backend-svc
                 port:
-                  number: 80
+                  number: 8080
             path: /
             pathType: Prefix
