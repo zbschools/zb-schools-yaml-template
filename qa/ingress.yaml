@@ -77,3 +77,13 @@ spec:
                 name: magnolia-public-frontend-svc
                 port:
                   number: 80
+    - host: uatadmin.zbschools.sg
+      http:
+        paths:
+          - backend:
+              service:
+                name: magnolia-public-backend-svc
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix
