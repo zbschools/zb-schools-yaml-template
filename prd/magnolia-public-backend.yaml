@@ -16,8 +16,8 @@ spec:
       k8s.kuboard.cn/name: magnolia-public-backend
   strategy:
     rollingUpdate:
-      maxSurge: 75%
-      maxUnavailable: 75%
+      maxSurge: 60%
+      maxUnavailable: 60%
     type: RollingUpdate
   template:
     metadata:
