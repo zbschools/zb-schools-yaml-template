@@ -70,10 +70,6 @@ spec:
               memory: 24Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /usr/local/tomcat/conf/server.xml
-              name: volume-xml
-              subPath: server.xml
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -83,14 +79,6 @@ spec:
       serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
       terminationGracePeriodSeconds: 30
-      volumes:
-        - configMap:
-            defaultMode: 420
-            items:
-              - key: server.xml
-                path: server.xml
-            name: public-server.xml
-          name: volume-xml
 ---
 apiVersion: v1
 kind: Service
