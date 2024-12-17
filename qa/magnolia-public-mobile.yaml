@@ -11,6 +11,11 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: nginx-mobile
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
