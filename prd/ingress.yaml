@@ -15,7 +15,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: prd.zbschools.sg
+    - host: www.zbschools.sg
       http:
         paths:
           - path: /
@@ -46,7 +46,7 @@ spec:
                 name: magnolia-author-backend-svc
                 port:
                   number: 8080
-    - host: m.prd.zbschools.sg
+    - host: m.zbschools.sg
       http:
         paths:
           - path: /
