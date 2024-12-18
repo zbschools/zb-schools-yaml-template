@@ -14,8 +14,8 @@ spec:
       k8s.kuboard.cn/name: saas-transfer-service
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxSurge: 2
+      maxUnavailable: 0
     type: RollingUpdate
   template:
     metadata:
