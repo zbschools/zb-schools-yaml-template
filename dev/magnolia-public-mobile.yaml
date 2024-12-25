@@ -54,7 +54,7 @@ spec:
       volumes:
         - configMap:
             defaultMode: 420
-            items:
+            items: 
               - key: nginx-mobile.conf
                 path: default.conf
             name: mobile-nginx-conf
@@ -119,10 +119,10 @@ server {
         rewrite ^(.+)$ /index.html break; # 重定向规则
      }
      error_page   500 502 503 504  /50x.html;
-     location  /50x.html {
+     location = /50x.html {
        root   /usr/share/nginx/html;
      }
-    }
+}
 kind: ConfigMap
 metadata:
   annotations: {}
