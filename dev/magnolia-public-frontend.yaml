@@ -122,7 +122,7 @@ data:
                 try_files $uri $uri/ /index.html @rewrites;
           }
 
-          location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
+          location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json|otf)$ {
             root   /usr/share/nginx/html;
             index  index.html index.htm;
             expires -1;
