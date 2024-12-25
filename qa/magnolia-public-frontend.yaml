@@ -121,14 +121,14 @@ data:
                 try_files $uri $uri/ /index.html @rewrites;
           }
 
-	location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
+          location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
             root   /usr/share/nginx/html;
             index  index.html index.htm;
             expires -1;
             try_files $uri $uri/ /index.html @rewrites;
         }
 
-	location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event) {
+        location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event) {
                 root /usr/share/nginx/html;
                 index index.html;
                 expires -1;
