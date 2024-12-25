@@ -114,7 +114,7 @@ data:
         client_max_body_size 100M;
 
         location = / {
-                root /usr/share/nginx/html;
+                root /usr/share/nginx/html/qa;
                 index index.html;
                 expires -1;
                 client_max_body_size 1000m;
@@ -122,14 +122,14 @@ data:
           }
 
           location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
-            root   /usr/share/nginx/html;
+            root   /usr/share/nginx/html/qa;
             index  index.html index.htm;
             expires -1;
             try_files $uri $uri/ /index.html @rewrites;
         }
 
         location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event) {
-                root /usr/share/nginx/html;
+                root /usr/share/nginx/html/qa;
                 index index.html;
                 expires -1;
                 client_max_body_size 1000m;
@@ -197,7 +197,7 @@ data:
         }
         error_page 500 502 503 504 /50x.html;
         location = /50x.html {
-            root /usr/share/nginx/html;
+            root /usr/share/nginx/html/qa;
         }
     }
 kind: ConfigMap

@@ -103,14 +103,14 @@ data:
 
 
         location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
-                root   /usr/share/nginx/html;
+                root   /usr/share/nginx/html/qa;
                 index  index.html;
                expires -1;
                 try_files $uri $uri/ /index.html @rewrites;
             }
 
        location = /  {
-                root /usr/share/nginx/html;
+                root /usr/share/nginx/html/qa;
                index  index.html;
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
@@ -121,7 +121,7 @@ data:
             }
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
-            root   /usr/share/nginx/html;
+            root   /usr/share/nginx/html/qa;
         }
     }
 kind: ConfigMap
