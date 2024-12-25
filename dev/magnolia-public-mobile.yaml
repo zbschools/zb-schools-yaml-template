@@ -98,7 +98,7 @@ data:
        text/x-cross-domain-policy;
 server {
     listen      80;
-    listen [::]:80;
+    #listen [::]:80;
     server_name localhost;
 
     location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
