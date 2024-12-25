@@ -97,26 +97,32 @@ data:
        text/x-component
        text/x-cross-domain-policy;
     server {
-        listen      80;
-        listen [::]:80;
-        server_name localhost;
+    listen      80;
+    listen [::]:80;
+    server_name localhost;
 
 
-        location /  {
-                root /usr/share/nginx/html/qa;
-                index  index.html;
-                client_max_body_size 1000m;
-                try_files $uri $uri/ /index.html @rewrites;
-            }
-
-        location @rewrites {
-                rewrite ^(.+)$ /index.html break; # 重定向规则 
-            }
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
+    location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
             root   /usr/share/nginx/html;
+            index  index.html;
+           expires -1;
+            try_files $uri $uri/ /index.html @rewrites;
+        }
+    
+      location = /  {
+            root /usr/share/nginx/html;
+           index  index.html;
+            client_max_body_size 1000m;
+            try_files $uri $uri/ /index.html @rewrites;
         }
 
+    location @rewrites {
+            rewrite ^(.+)$ /index.html break; # 重定向规则 
+        }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
     }
 kind: ConfigMap
 metadata:
