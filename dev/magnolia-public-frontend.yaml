@@ -109,82 +109,97 @@ data:
        text/x-component
        text/x-cross-domain-policy;
     server {
-            listen       80;
-            listen  [::]:80;
-            server_name  localhost;
-            client_max_body_size 100M;
+        listen       80;
+        listen  [::]:80;
+        server_name  localhost;
+        client_max_body_size 100M;
 
-            location / {
-                    root /usr/share/nginx/html;
-                    index index.html;
-                    expires -1;
-                    client_max_body_size 1000m;
-                    try_files $uri $uri/ /index.html @rewrites;
-
-                    location ~* \.(js|css)$ {
-                        expires 7d;
-                        add_header Cache-Control "public, no-cache, max-age=604800";
-                    }
-                }
-
-            location /lms/file/uploadFile {
-                proxy_pass http://saas-homework-service-svc:8080/file/uploadFile;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-            }
-            
-            location /lms/teacherClass {
-                proxy_pass http://saas-homework-service-svc:8080/teacherClass;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-            }
-
-            location /lms/file/getRedirectUrl {
-                  proxy_pass http://saas-homework-service-svc:8080/file/getRedirectUrl;
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-            }
-            
-            location /lms/file/getMagnoliaRedirectUrl {
-                  proxy_pass http://saas-homework-service-svc:8080/file/getMagnoliaRedirectUrl;
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-            }
-
-
-            location /lms/yd/textToSpeech {
-                  proxy_pass http://saas-homework-service-svc:8080/yd/textToSpeech;
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-            }
-
-            location /lms/excel {
-                  proxy_pass http://saas-homework-service-svc:8080/excel;
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-            }
-
-
-            
-            location @rewrites {
-                rewrite ^(.+)$ /index.html break;
-            }
-            error_page 500 502 503 504 /50x.html;
-            location = /50x.html {
+        location = / {
                 root /usr/share/nginx/html;
-            }
+                index index.html;
+                expires -1;
+                client_max_body_size 1000m;
+                try_files $uri $uri/ /index.html @rewrites;
+          }
+
+	location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json)$ {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+            expires -1;
+            try_files $uri $uri/ /index.html @rewrites;
+        }
+
+	location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event) {
+                root /usr/share/nginx/html;
+                index index.html;
+                expires -1;
+                client_max_body_size 1000m;
+                try_files $uri $uri/ /index.html @rewrites;
+         }
+
+        location /lms/file/uploadFile {
+            proxy_pass http://saas-homework-service-svc:8080/file/uploadFile;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /lms/teacherClass {
+            proxy_pass http://saas-homework-service-svc:8080/teacherClass;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /lms/file/getRedirectUrl {
+              proxy_pass http://saas-homework-service-svc:8080/file/getRedirectUrl;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /lms/file/getMagnoliaRedirectUrl {
+              proxy_pass http://saas-homework-service-svc:8080/file/getMagnoliaRedirectUrl;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+
+        location /lms/yd/textToSpeech {
+              proxy_pass http://saas-homework-service-svc:8080/yd/textToSpeech;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /lms/excel {
+              proxy_pass http://saas-homework-service-svc:8080/excel;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        location /transfer {
+              proxy_pass http://saas-transfer-service:8081;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location @rewrites {
+            rewrite ^(.+)$ /index.html break;
+        }
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root /usr/share/nginx/html;
+        }
     }
 kind: ConfigMap
 metadata:
