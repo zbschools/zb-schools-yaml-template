@@ -128,7 +128,7 @@ data:
             try_files $uri $uri/ /index.html @rewrites;
         }
 
-        location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event) {
+        location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event|home) {
                 root /usr/share/nginx/html/qa;
                 index index.html;
                 expires -1;
