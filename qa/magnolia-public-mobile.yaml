@@ -101,17 +101,9 @@ data:
         listen [::]:80;
         server_name localhost;
 
-
-        location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json|otf)$ {
-                root   /usr/share/nginx/html/qa;
-                index  index.html;
-               expires -1;
-                try_files $uri $uri/ /index.html @rewrites;
-            }
-
-       location = /  {
+        location /  {
                 root /usr/share/nginx/html/qa;
-               index  index.html;
+                index  index.html;
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
             }
