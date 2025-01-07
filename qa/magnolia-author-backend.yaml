@@ -62,11 +62,11 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "6"
+              memory: 14Gi
             requests:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "6"
+              memory: 14Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
