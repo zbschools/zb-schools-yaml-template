@@ -33,6 +33,23 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: nginx-mobile
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: magnolia-public-backend
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       containers:
         - env:
             - name: TZ

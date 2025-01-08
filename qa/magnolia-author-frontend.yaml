@@ -28,6 +28,15 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-author-frontend
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: magnolia-author-backend
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
           imagePullPolicy: Always
