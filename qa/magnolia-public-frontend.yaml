@@ -27,7 +27,7 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
-        affinity:
+      affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
