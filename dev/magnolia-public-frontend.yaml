@@ -108,6 +108,7 @@ data:
        text/vtt
        text/x-component
        text/x-cross-domain-policy;
+    proxy_max_temp_file_size 1024m;
     server {
         listen       80;
         listen  [::]:80;
