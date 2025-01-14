@@ -23,6 +23,7 @@ spec:
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2024-06-26T14:15:57+08:00"
       creationTimestamp: null
       labels:
