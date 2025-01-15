@@ -21,6 +21,7 @@ spec:
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2024-06-26T13:41:20+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
