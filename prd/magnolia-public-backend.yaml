@@ -42,7 +42,6 @@ spec:
             - labelSelector:
                 matchLabels:
                     app: magnolia-public-backend
-                topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
