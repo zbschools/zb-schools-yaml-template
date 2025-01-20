@@ -6,7 +6,6 @@ metadata:
     k8s.kuboard.cn/workload: saas-homework-service
   labels:
     k8s.kuboard.cn/name: saas-homework-service
-    app: saas-homework-service
   name: saas-homework-service
   namespace: zb-schools
 spec:
@@ -16,7 +15,6 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: saas-homework-service
-      app: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -35,7 +33,6 @@ spec:
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: saas-homework-service
-        app: saas-homework-service
     spec:
       affinity:
         podAffinity:
@@ -43,14 +40,14 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app: magnolia-public-frontend
+                    k8s.kuboard.cn/name: magnolia-public-frontend
                 topologyKey: kubernetes.io/hostname
               weight: 100
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app: saas-homework-service
+                  k8s.kuboard.cn/name: saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
         - command:
