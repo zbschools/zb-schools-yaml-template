@@ -18,7 +18,7 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 2
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
@@ -29,14 +29,6 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/nam: e saas-homework-service
-                topologyKey: kubernetes.io/hostname
-              weight: 100
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
