@@ -36,12 +36,6 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-backend
         app: magnolia-public-backend
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                    app: magnolia-public-backend
       containers:
         - env:
             - name: TZ
