@@ -6,28 +6,39 @@ metadata:
   namespace: zb-schools
   labels:
     k8s.kuboard.cn/name: nginx-mobile
+    app: nginx-mobile
 spec:
   replicas: 3
   selector:
     matchLabels:
       k8s.kuboard.cn/name: nginx-mobile
+      app: nginx-mobile
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 1
+      maxUnavailable: 2
     type: RollingUpdate
   template:
     metadata:
       labels:
         k8s.kuboard.cn/name: nginx-mobile
+        app: nginx-mobile
     spec:
       affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: magnolia-public-backend
+                topologyKey: kubernetes.io/hostname
+              weight: 100
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: nginx-mobile
+                    app: nginx-mobile
                 topologyKey: kubernetes.io/hostname
             weight: 100
       containers:

@@ -6,6 +6,7 @@ metadata:
     k8s.kuboard.cn/workload: magnolia-public-frontend
   labels:
     k8s.kuboard.cn/name: magnolia-public-frontend
+    app: magnolia-public-frontend
   name: magnolia-public-frontend
   namespace: zb-schools
 spec:
@@ -15,10 +16,11 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-frontend
+      app: magnolia-public-frontend
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 1
+      maxUnavailable: 2
     type: RollingUpdate
   template:
     metadata:
@@ -27,22 +29,23 @@ spec:
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: magnolia-public-frontend
+        app: magnolia-public-frontend
     spec:
       affinity:
         podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: saas-homework-service
-              topologyKey: kubernetes.io/hostname
-        podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-frontend
+                    app: saas-homework-service
                 topologyKey: kubernetes.io/hostname
               weight: 100
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: magnolia-public-frontend
+              topologyKey: kubernetes.io/hostname
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: IfNotPresent

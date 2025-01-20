@@ -6,6 +6,7 @@ metadata:
     k8s.kuboard.cn/workload: magnolia-public-backend
   labels:
     k8s.kuboard.cn/name: magnolia-public-backend
+    app: magnolia-public-backend
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
@@ -14,10 +15,11 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-backend
+      app: magnolia-public-backend
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 1
+      maxUnavailable: 2
     type: RollingUpdate
   template:
     metadata:
@@ -32,7 +34,15 @@ spec:
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
+        app: magnolia-public-backend
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                    app: magnolia-public-backend
+                topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
