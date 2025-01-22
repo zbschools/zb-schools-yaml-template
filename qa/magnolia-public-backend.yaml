@@ -9,19 +9,20 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  replicas: 3
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-backend
   strategy:
     rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 1
+      maxSurge: 1
+      maxUnavailable: 0
     type: RollingUpdate
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role

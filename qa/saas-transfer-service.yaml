@@ -28,6 +28,7 @@ spec:
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2024-10-08T12:10:26+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
@@ -66,11 +67,11 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "3"
-              memory: 6Gi
+              cpu: "4"
+              memory: 8Gi
             requests:
-              cpu: "3"
-              memory: 6Gi
+              cpu: "4"
+              memory: 8Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst

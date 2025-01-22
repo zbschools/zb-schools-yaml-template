@@ -7,17 +7,20 @@ metadata:
   labels:
     k8s.kuboard.cn/name: nginx-mobile
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       k8s.kuboard.cn/name: nginx-mobile
   strategy:
     rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 1
+      maxSurge: 1
+      maxUnavailable: 0
     type: RollingUpdate
+ 
   template:
     metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
       labels:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
@@ -53,10 +56,10 @@ spec:
           resources:
             limits:
               cpu: "2"
-              memory: 3Gi
+              memory: 4Gi
             requests:
               cpu: "2"
-              memory: 3Gi
+              memory: 4Gi
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
