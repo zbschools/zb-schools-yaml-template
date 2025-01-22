@@ -118,6 +118,9 @@ data:
         listen      80;
         listen [::]:80;
         server_name localhost;
+        client_max_body_size 1000M;
+        access_log /mnt/access.log main;
+        error_log /mnt/error.log warn;
 
 
         location /  {
