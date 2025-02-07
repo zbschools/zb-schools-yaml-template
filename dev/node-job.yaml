@@ -28,7 +28,6 @@ spec:
       containers:
         - command:
             - sh
-            - '-c'
             - /code/auto-job.sh
           image: '767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend'
           imagePullPolicy: IfNotPresent
