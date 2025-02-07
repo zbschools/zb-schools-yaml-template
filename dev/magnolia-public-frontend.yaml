@@ -57,6 +57,9 @@ spec:
             - mountPath: /etc/nginx/conf.d/default.conf
               name: volume-2hfc3
               subPath: default.conf
+            - mountPath: /etc/nginx/nginx.conf
+              name: volume-fxbsk
+              subPath: nginx.conf
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -72,6 +75,13 @@ spec:
                 path: default.conf
             name: public-nginx-conf
           name: volume-2hfc3
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+            name: public-nginx-conf
+          name: volume-fxbsk
 ---
 apiVersion: v1
 data:
