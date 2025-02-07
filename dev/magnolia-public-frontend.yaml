@@ -112,8 +112,8 @@ data:
        text/x-cross-domain-policy;
     proxy_max_temp_file_size 1024m;
     server {
-        listen       88;
-        listen  [::]:88;
+        listen       80;
+        listen  [::]:80;
         server_name  localhost;
         client_max_body_size 1000M;
 
