@@ -35,7 +35,7 @@ spec:
           env:
             - name : TZ
               value: CST-8
-            - name : UMI_ENV
+            - name : ENV
               value: sit
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: Always
