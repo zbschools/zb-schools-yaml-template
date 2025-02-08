@@ -31,7 +31,10 @@ spec:
       containers:
         - command:
             - sh
-            - /code/scripts/auto-job.sh
+            - /code/scripts/cron-job.sh
+          env:
+            - name : TZ
+              value: CST-8
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: Always
           name: nginx
