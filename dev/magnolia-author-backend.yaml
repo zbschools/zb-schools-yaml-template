@@ -93,3 +93,4 @@ spec:
   type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-author-backend
+  sessionAffinity: None
