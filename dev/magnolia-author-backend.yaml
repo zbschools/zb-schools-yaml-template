@@ -93,7 +93,3 @@ spec:
   type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-author-backend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
