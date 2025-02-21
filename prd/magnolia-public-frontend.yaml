@@ -36,7 +36,15 @@ spec:
                   k8s.kuboard.cn/name: magnolia-public-frontend
               topologyKey: kubernetes.io/hostname
       containers:
-        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
+        - command:
+            - sh
+            - /code/scripts/cron-job.sh
+          env:
+            - name : TZ
+              value: CST-8
+            - name : ENV
+              value: prd
+          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
@@ -83,7 +91,6 @@ spec:
 apiVersion: v1
 data:
   default.conf: |-
-    gzip on;
     gzip_comp_level 5;
     gzip_min_length 3;
     gzip_proxied any;
@@ -121,8 +128,6 @@ data:
             listen  [::]:80;
             server_name  localhost;
             client_max_body_size 1000M;
-            access_log /mnt/access.log main;
-            error_log /mnt/error.log warn;
 
             location / {
                     root /usr/share/nginx/html;
