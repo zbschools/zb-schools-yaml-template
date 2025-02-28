@@ -98,7 +98,7 @@ spec:
               memory: 24Gi
           livenessProbe:
             failureThreshold: 6
-             httpGet:
+            httpGet:
               path: >-
                 /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
               port: 8080
