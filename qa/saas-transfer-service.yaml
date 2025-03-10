@@ -44,7 +44,7 @@ spec:
         - command:
             - /bin/bash
             - "-ce"
-            - java  -Xms1024m -Xmx1024m -jar /opt/app/saas-transfer-service.jar
+            - java  -Xms1024m -Xmx2048m -jar /opt/app/saas-transfer-service.jar
           env:
             - name: TZ
               value: CST-8
@@ -67,11 +67,11 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "4"
-              memory: 8Gi
+              cpu: "2"
+              memory: 4Gi
             requests:
-              cpu: "4"
-              memory: 8Gi
+              cpu: "2"
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst

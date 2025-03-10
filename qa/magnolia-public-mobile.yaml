@@ -25,6 +25,12 @@ spec:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
       affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  k8s.kuboard.cn/name: saas-homework-service
+              topologyKey: kubernetes.io/hostname
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:

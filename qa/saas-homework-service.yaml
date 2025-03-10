@@ -41,7 +41,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-backend
+                    k8s.kuboard.cn/name: magnolia-public-mobile
                 topologyKey: kubernetes.io/hostname
               weight: 100
         podAntiAffinity:
