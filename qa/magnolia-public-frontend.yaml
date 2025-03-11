@@ -29,12 +29,6 @@ spec:
         k8s.kuboard.cn/name: saas-transfer-service
     spec:
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: saas-homework-service
-              topologyKey: kubernetes.io/hostname
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
