@@ -26,7 +26,7 @@ spec:
         kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: saas-transfer-service
+        k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       affinity:
         podAntiAffinity:
