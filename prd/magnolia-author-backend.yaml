@@ -50,8 +50,8 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 30
+          startupProbe:
+            failureThreshold: 100000
             httpGet:
               path: >-
                 /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
@@ -59,6 +59,26 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 120
             periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: >-
+                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: >-
+                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 1
           resources:
