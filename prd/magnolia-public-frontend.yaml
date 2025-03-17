@@ -49,7 +49,7 @@ spec:
             - name : TZ
               value: CST-8
             - name : ENV
-              value: prd
+              value: prod
           image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
           imagePullPolicy: IfNotPresent
           name: nginx
