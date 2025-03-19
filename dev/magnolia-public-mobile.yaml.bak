@@ -112,6 +112,19 @@ data:
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
             }
+        location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json|otf)$ {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+            expires -1;
+            try_files $uri $uri/ /index.html @rewrites;
+        }
+        location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event|home) {
+                root /usr/share/nginx/html;
+                index index.html;
+                expires -1;
+                client_max_body_size 1000m;
+                try_files $uri $uri/ /index.html @rewrites;
+         }
         location @rewrites {
                 rewrite ^(.+)$ /index.html break; # 重定向规则
             }
