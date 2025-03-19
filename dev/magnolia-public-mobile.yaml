@@ -104,20 +104,20 @@ data:
         client_max_body_size 1000M;
         access_log /mnt/access.log main;
         error_log /mnt/error.log warn;
-
-        location = /  {
+        
+        location /  {
                 root /usr/share/nginx/html;
                 index  index.html;
-                expires -1;
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
             }
+
         location @rewrites {
                 rewrite ^(.+)$ /index.html break; # 重定向规则
             }
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
-            root   /usr/share/nginx/html;
+            root   /usr/share/nginx/html/qa;
         }
     }
 kind: ConfigMap
