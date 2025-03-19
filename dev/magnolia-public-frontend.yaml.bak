@@ -121,20 +121,30 @@ data:
         listen  [::]:80;
         server_name  localhost;
         client_max_body_size 1000M;
-        
 
-        location / {
-                    root /usr/share/nginx/html;
-                    index index.html;
-                    expires -1;
-                    client_max_body_size 1000m;
-                    try_files $uri $uri/ /index.html @rewrites;
 
-                    location ~* \.(js|css)$ {
-                        expires 7d;
-                        add_header Cache-Control "public, no-cache, max-age=604800";
-                    }
-                }
+        location = / {
+                root /usr/share/nginx/html;
+                index index.html;
+                expires -1;
+                client_max_body_size 1000m;
+                try_files $uri $uri/ /index.html @rewrites;
+          }
+
+          location ~* .(gif|jpg|jpeg|html|css|js|png|ttf|woff2|ico|svg|json|otf)$ {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+            expires -1;
+            try_files $uri $uri/ /index.html @rewrites;
+        }
+
+        location  ~* ^/(video|article|oauth|exercise|issues|homework|teacher|student|user-center|about-us|contact-us|policy|FAQ|collection|statistics|event|home) {
+                root /usr/share/nginx/html;
+                index index.html;
+                expires -1;
+                client_max_body_size 1000m;
+                try_files $uri $uri/ /index.html @rewrites;
+         }
 
         location /lms/file/uploadFile {
             proxy_pass http://saas-homework-service-svc:8080/file/uploadFile;
