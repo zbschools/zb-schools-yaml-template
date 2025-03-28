@@ -61,10 +61,10 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: 4Gi
             requests:
-              cpu: "2"
+              cpu: "1"
               memory: 4Gi
       restartPolicy: Always
       schedulerName: default-scheduler
