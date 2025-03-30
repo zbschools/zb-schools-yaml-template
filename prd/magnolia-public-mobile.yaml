@@ -13,7 +13,7 @@ spec:
       k8s.kuboard.cn/name: nginx-mobile
   strategy:
     rollingUpdate:
-      maxSurge: 3
+      maxSurge: 2
       maxUnavailable: 0
     type: RollingUpdate
   template:
@@ -56,11 +56,11 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
             requests:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
           volumeMounts:
             - mountPath: /etc/nginx/conf.d/default.conf
               name: volume-conf
