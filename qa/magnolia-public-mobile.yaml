@@ -31,14 +31,6 @@ spec:
                 matchLabels:
                   k8s.kuboard.cn/name: saas-transfer-service
               topologyKey: kubernetes.io/hostname
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/name: nginx-mobile
-                topologyKey: kubernetes.io/hostname
-            weight: 100
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
           imagePullPolicy: IfNotPresent
@@ -61,11 +53,11 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
             requests:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
