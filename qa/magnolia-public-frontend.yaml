@@ -1,4 +1,15 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: public-frontend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selecter:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-frontend
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,14 +20,14 @@ metadata:
   name: magnolia-public-frontend
   namespace: zb-schools
 spec:
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-frontend
   strategy:
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 3
       maxUnavailable: 0
     type: RollingUpdate
   template:
@@ -63,11 +74,11 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
             requests:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
