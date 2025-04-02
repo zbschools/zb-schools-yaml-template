@@ -1,4 +1,15 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: homework-service-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: saas-homework-service
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,14 +21,14 @@ metadata:
   namespace: zb-schools
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       k8s.kuboard.cn/name: saas-homework-service
   strategy:
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 3
       maxUnavailable: 0
     type: RollingUpdate
   template:
@@ -36,14 +47,6 @@ spec:
         k8s.kuboard.cn/name: saas-homework-service
     spec:
       affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-mobile
-                topologyKey: kubernetes.io/hostname
-              weight: 100
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -80,10 +83,10 @@ spec:
           resources:
             limits:
               cpu: "4"
-              memory: 8Gi
+              memory: 6Gi
             requests:
               cpu: "4"
-              memory: 8Gi
+              memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
