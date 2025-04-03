@@ -1,4 +1,15 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: public-mobile-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: nginx-mobile 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,20 +18,20 @@ metadata:
   labels:
     k8s.kuboard.cn/name: nginx-mobile
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       k8s.kuboard.cn/name: nginx-mobile
   strategy:
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 3
       maxUnavailable: 0
     type: RollingUpdate
  
   template:
     metadata:
       annotations:
-        karpenter.sh/do-not-disrupt: "true"
+        karpenter.sh/do-not-disrupt: "false"
       labels:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
@@ -29,7 +40,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  k8s.kuboard.cn/name: saas-transfer-service
+                  k8s.kuboard.cn/name: saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
