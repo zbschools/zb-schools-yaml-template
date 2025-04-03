@@ -51,6 +51,8 @@ spec:
             - labelSelector:
                 matchLabels:
                   k8s.kuboard.cn/name: saas-homework-service
+                  k8s.kuboard.cn/name: saas-transfer-service
+                  k8s.kuboard.cn/name: nginx-mobile
               topologyKey: kubernetes.io/hostname
       containers:
         - command:
@@ -83,7 +85,7 @@ spec:
               memory: 6Gi
             requests:
               cpu: "2"
-              memory: 6Gi
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
