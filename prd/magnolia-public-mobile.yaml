@@ -33,12 +33,6 @@ spec:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: magnolia-public-backend
-              topologyKey: kubernetes.io/hostname
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
