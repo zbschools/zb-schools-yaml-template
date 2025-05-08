@@ -128,6 +128,9 @@ data:
 
 
         location /  {
+                add_header Cache-Control "no-cache, no-store, must-revalidate"；
+                add_header Pragma "no-cache";
+                add_header Expires "0";
                 root /usr/share/nginx/html-prd;
                 index  index.html;
                 client_max_body_size 1000m;
