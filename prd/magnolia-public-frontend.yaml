@@ -40,12 +40,6 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: magnolia-public-mobile
-              topologyKey: kubernetes.io/hostname
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
