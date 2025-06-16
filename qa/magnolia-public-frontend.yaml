@@ -210,6 +210,13 @@ data:
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
               proxy_set_header X-Forwarded-Proto $scheme;
         }
+        location /share/ {
+              proxy_pass http://magnolia-public-backend-svc:8080/magnoliaPublic/.rest/delivery/share/v1/article/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
 
         location @rewrites {
             rewrite ^(.+)$ /index.html break;
