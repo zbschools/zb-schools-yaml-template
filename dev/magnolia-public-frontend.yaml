@@ -216,6 +216,14 @@ data:
               proxy_set_header X-Forwarded-Proto $scheme;
         }
 
+        location /lms/ins/getAccessToken {
+              proxy_pass http://saas-homework-service-svc:8080/ins/getAccessToken;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
         location @rewrites {
             rewrite ^(.+)$ /index.html break;
         }
