@@ -29,6 +29,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
         vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
         vault.hashicorp.com/agent-inject-secret-kv-aksk: "zb-schools/kv/aksk"
+        vault.hashicorp.com/agent-inject-secret-kv-meta_ins: "zb-schools/kv/meta_ins"
         vault.hashicorp.com/log-level: "debug"
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
       creationTimestamp: null
