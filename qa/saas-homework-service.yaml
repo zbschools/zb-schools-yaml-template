@@ -35,7 +35,6 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        karpenter.sh/do-not-disrupt: "false"
         kubectl.kubernetes.io/restartedAt: "2024-06-26T11:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
