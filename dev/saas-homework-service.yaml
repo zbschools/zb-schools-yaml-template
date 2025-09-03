@@ -63,10 +63,10 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "4"
+              cpu: "2"
               memory: 6Gi
             requests:
-              cpu: "4"
+              cpu: "2"
               memory: 6Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
