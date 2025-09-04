@@ -39,15 +39,6 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-frontend
-                topologyKey: kubernetes.io/hostname
-              weight: 100
       containers:
         - command:
             - bash
@@ -72,10 +63,6 @@ spec:
             tcpSocket:
               port: 80
             timeoutSeconds: 2
-          resources:
-            limits:
-              cpu: "1"
-              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
