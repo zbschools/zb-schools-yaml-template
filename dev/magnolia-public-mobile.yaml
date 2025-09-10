@@ -21,6 +21,13 @@ spec:
       labels:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  k8s.kuboard.cn/name: magnolia-author-backend
+              topologyKey: kubernetes.io/hostname
       containers:
         - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
           imagePullPolicy: IfNotPresent

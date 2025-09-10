@@ -36,6 +36,13 @@ spec:
       labels:
         k8s.kuboard.cn/name: saas-homework-service
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  k8s.kuboard.cn/name: magnolia-public-backend
+              topologyKey: kubernetes.io/hostname
       containers:
         - command:
             - /bin/bash
