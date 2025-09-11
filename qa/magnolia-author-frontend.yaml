@@ -34,7 +34,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                    k8s.kuboard.cn/name: magnolia-author-backend
+                  k8s.kuboard.cn/name: magnolia-author-backend
               topologyKey: kubernetes.io/hostname
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
@@ -52,13 +52,6 @@ spec:
             tcpSocket:
               port: 80
             timeoutSeconds: 2
-          resources:
-            limits:
-              cpu: "2"
-              memory: 3Gi
-            requests:
-              cpu: "2"
-              memory: 3Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
