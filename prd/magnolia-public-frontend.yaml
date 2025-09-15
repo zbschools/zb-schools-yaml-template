@@ -40,12 +40,20 @@ spec:
         k8s.kuboard.cn/name: magnolia-public-frontend
     spec:
       affinity:
-        podAntiAffinity:
+        podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  k8s.kuboard.cn/name: magnolia-public-frontend
+                  k8s.kuboard.cn/name: magnolia-public-backend
               topologyKey: kubernetes.io/hostname
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: magnolia-public-frontend
+                topologyKey: kubernetes.io/hostname
+              weight: 60
       containers:
         - command:
             - bash

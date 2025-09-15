@@ -32,6 +32,13 @@ spec:
       labels:
         k8s.kuboard.cn/name: saas-transfer-service
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  k8s.kuboard.cn/name: magnolia-author-backend
+              topologyKey: kubernetes.io/hostname
       containers:
         - command:
             - /bin/bash
@@ -59,8 +66,8 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 3Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
