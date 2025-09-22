@@ -37,7 +37,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  k8s.kuboard.cn/name: magnolia-public-backend
+                  k8s.kuboard.cn/name: saas-homework-service
               topologyKey: kubernetes.io/hostname
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
