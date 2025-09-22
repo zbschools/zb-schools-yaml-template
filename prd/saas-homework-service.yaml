@@ -61,7 +61,7 @@ spec:
                   matchLabels:
                     k8s.kuboard.cn/name:  saas-homework-service
                 topologyKey: kubernetes.io/hostname
-              weigh70t: 60
+              weight: 60
       containers:
         - command:
             - /bin/bash

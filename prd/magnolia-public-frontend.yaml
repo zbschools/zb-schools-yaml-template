@@ -53,7 +53,7 @@ spec:
                   matchLabels:
                     k8s.kuboard.cn/name: magnolia-public-frontend
                 topologyKey: kubernetes.io/hostname
-              weight: 60
+              weight: 100
       containers:
         - command:
             - bash

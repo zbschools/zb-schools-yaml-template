@@ -46,7 +46,7 @@ spec:
                   matchLabels:
                     k8s.kuboard.cn/name:  nginx-mobile
                 topologyKey: kubernetes.io/hostname
-              weigh70t: 60
+              weight: 60
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
           imagePullPolicy: IfNotPresent
