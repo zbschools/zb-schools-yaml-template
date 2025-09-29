@@ -1,39 +1,25 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: public-mobile-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile 
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: magnolia-public-mobile
+  name: tencent-games 
   namespace: zb-schools
   labels:
-    k8s.kuboard.cn/name: nginx-mobile
+    k8s.kuboard.cn/name: tencent-games
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile
+      k8s.kuboard.cn/name: tencent-games
   strategy:
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 0
+      maxUnavailable: 0 
     type: RollingUpdate
- 
   template:
     metadata:
-      annotations:
-        karpenter.sh/do-not-disrupt: "false"
       labels:
-        k8s.kuboard.cn/name: nginx-mobile
+        k8s.kuboard.cn/name: tencent-games
     spec:
       affinity:
         podAffinity:
@@ -45,41 +31,41 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
-        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
+        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/tencent-games"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
             - containerPort: 80
               name: http
               protocol: TCP
-          volumeMounts:
-            - mountPath: /etc/nginx/conf.d/default.conf
-              name: volume-conf
-              subPath: default.conf
           readinessProbe:
             failureThreshold: 3
-            initialDelaySeconds: 20
+            initialDelaySeconds: 50
             periodSeconds: 5
             successThreshold: 1
             tcpSocket:
               port: 80
             timeoutSeconds: 2
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: volume-conf
+              subPath: default.conf
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       volumes:
         - configMap:
             defaultMode: 420
-            items:
-              - key: nginx-mobile.conf
+            items: 
+              - key: nginx-tencent-games.conf
                 path: default.conf
-            name: mobile-nginx-conf
+            name: tencent-games-nginx-conf
           name: volume-conf
 
 ---
 apiVersion: v1
 data:
-  nginx-mobile.conf: |-
+  nginx-tencent-games.conf: |-
     gzip on;
     gzip_comp_level 5;
     gzip_min_length 3;
@@ -120,9 +106,9 @@ data:
         client_max_body_size 1000M;
         access_log /mnt/access.log main;
         error_log /mnt/error.log warn;
-
+        
         location /  {
-                root /usr/share/nginx/html-qa;
+                root /usr/share/nginx/html;
                 index  index.html;
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
@@ -133,31 +119,31 @@ data:
             }
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
-            root   /usr/share/nginx/html-qa;
+            root   /usr/share/nginx/html;
         }
     }
 kind: ConfigMap
 metadata:
   annotations: {}
   labels: {}
-  name: mobile-nginx-conf
+  name: tencent-games-nginx-conf
   namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-mobile-svc
+  name: magnolia-public-games-svc
   namespace: zb-schools
 spec:
   ports:
-    - name: ngmobile
+    - name: ngames
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
-    k8s.kuboard.cn/name: nginx-mobile
+    k8s.kuboard.cn/name: tencent-games
+  type: ClusterIP
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
       timeoutSeconds: 86400
-  type: ClusterIP

@@ -41,11 +41,13 @@ spec:
     spec:
       affinity:
         podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: magnolia-author-backend
-              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: saas-homework-service
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       containers:
         - command:
             - bash
@@ -203,6 +205,14 @@ data:
         }
         location /share/ {
               proxy_pass http://magnolia-public-backend-svc:8080/magnoliaPublic/.rest/delivery/share/v1/article/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /games/ {
+              proxy_pass http://magnolia-public-games-svc:80/;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
