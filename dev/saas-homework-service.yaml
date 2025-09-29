@@ -37,7 +37,7 @@ spec:
         k8s.kuboard.cn/name: saas-homework-service
     spec:
       affinity:
-        podAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
