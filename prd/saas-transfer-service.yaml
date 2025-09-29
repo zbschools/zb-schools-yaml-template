@@ -34,11 +34,13 @@ spec:
     spec:
       affinity:
         podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  k8s.kuboard.cn/name: magnolia-author-backend
-              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: saas-homework-service
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       containers:
         - command:
             - /bin/bash
