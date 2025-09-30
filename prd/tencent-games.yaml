@@ -108,7 +108,7 @@ data:
         error_log /mnt/error.log warn;
         
         location /  {
-                root /usr/share/nginx/html;
+                root /usr/share/nginx/prd;
                 index  index.html;
                 client_max_body_size 1000m;
                 try_files $uri $uri/ /index.html @rewrites;
@@ -119,7 +119,7 @@ data:
             }
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
-            root   /usr/share/nginx/html;
+            root   /usr/share/nginx/prd;
         }
     }
 kind: ConfigMap
