@@ -114,6 +114,14 @@ data:
                 try_files $uri $uri/ /index.html @rewrites;
             }
 
+        location /games/ {
+              proxy_pass http://magnolia-public-games-svc:80/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
         location @rewrites {
                 rewrite ^(.+)$ /index.html break; # 重定向规则
             }
