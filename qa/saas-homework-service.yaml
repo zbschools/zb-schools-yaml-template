@@ -52,14 +52,14 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: k8s.kuboard.cn/name
-                  operator: In
-                  values:
-                  - magnolia-author-backend
-                  - magnolia-public-backend
-              topologyKey: kubernetes.io/hostname
+          - labelSelector:
+              matchExpressions:
+              - key: k8s.kuboard.cn/name
+                operator: In
+                values:
+                - magnolia-author-backend
+                - magnolia-public-backend
+            topologyKey: kubernetes.io/hostname
       containers:
         - command:
             - /bin/bash
