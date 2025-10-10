@@ -59,7 +59,6 @@ spec:
                   values:
                   - magnolia-author-backend
                   - magnolia-public-backend
-                  - saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
         - command:
