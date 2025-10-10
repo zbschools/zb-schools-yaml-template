@@ -27,7 +27,6 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: saas-homework-service
-      app: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -49,6 +48,17 @@ spec:
       labels:
         k8s.kuboard.cn/name: saas-homework-service
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: k8s.kuboard.cn/name
+                operator: In
+                values:
+                - magnolia-author-backend
+                - magnolia-public-backend
+            topologyKey: kubernetes.io/hostname
       containers:
         - command:
             - /bin/bash
