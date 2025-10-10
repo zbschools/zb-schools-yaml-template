@@ -55,10 +55,10 @@ spec:
             - labelSelector:
               matchExpressions:
               - key: k8s.kuboard.cn/name
-                  operator: In
-                  values:
-                  - magnolia-author-backend
-                  - magnolia-public-backend
+                operator: In
+                values:
+                - magnolia-author-backend
+                - magnolia-public-backend
               topologyKey: kubernetes.io/hostname
       containers:
         - command:
