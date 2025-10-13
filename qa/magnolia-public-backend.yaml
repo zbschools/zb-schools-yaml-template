@@ -35,6 +35,17 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: k8s.kuboard.cn/name
+                operator: In
+                values:
+                - saas-homework-service
+                - magnolia-author-backend
+            topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
