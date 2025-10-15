@@ -45,6 +45,18 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: k8s.kuboard.cn/name
+                  operator: In
+                  values:
+                  - magnolia-author-backend
+                  - magnolia-public-backend
+                  - saas-homework-service
+              topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
@@ -95,11 +107,11 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "14"
+              memory: 28Gi
             requests:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "14"
+              memory: 28Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
