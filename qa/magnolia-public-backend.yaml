@@ -86,10 +86,10 @@ spec:
             timeoutSeconds: 2
           resources:
             limits:
-              cpu: "6"
+              cpu: "4"
               memory: 12Gi
             requests:
-              cpu: "6"
+              cpu: "4"
               memory: 12Gi
           livenessProbe:
             failureThreshold: 6

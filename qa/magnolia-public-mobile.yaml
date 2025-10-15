@@ -64,6 +64,10 @@ spec:
             tcpSocket:
               port: 80
             timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
