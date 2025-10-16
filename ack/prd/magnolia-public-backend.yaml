@@ -110,8 +110,6 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: service-account-sph-zb-schools
-      serviceAccountName: service-account-sph-zb-schools
       terminationGracePeriodSeconds: 30
 ---
 apiVersion: v1
