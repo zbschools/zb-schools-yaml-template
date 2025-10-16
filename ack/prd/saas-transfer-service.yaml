@@ -20,20 +20,11 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-09-25T11:46:16+08:00"       
+        kubectl.kubernetes.io/restartedAt: "2025-10-16T02:15:16+08:00"       
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: saas-transfer-service
     spec:
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/name: saas-homework-service
-                topologyKey: kubernetes.io/hostname
-              weight: 100
       containers:
         - command:
             - /bin/bash
@@ -44,7 +35,7 @@ spec:
               value: CST-8
             - name: RUN_ENV
               value: "prd"
-          image: "registry.cn-chengdu.aliyuncs.com/sph-prd/saas-transfer-service"
+          image: "registry.cn-chengdu.aliyuncs.com/sph-prd/saas-transfer-service:v"
           imagePullPolicy: IfNotPresent
           name: transfer
           ports:
