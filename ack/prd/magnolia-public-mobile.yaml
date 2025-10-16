@@ -50,7 +50,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
-        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/sph-mobile"
+        - image: "registry.cn-chengdu.aliyuncs.com/sph-prd/sph-mobile:v"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
@@ -75,6 +75,8 @@ spec:
               subPath: default.conf
       restartPolicy: Always
       schedulerName: default-scheduler
+      imagePullSecrets:
+        - name: sph-ack-test
       securityContext: {}
       volumes:
         - configMap:
