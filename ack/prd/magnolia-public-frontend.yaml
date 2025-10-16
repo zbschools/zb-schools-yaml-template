@@ -65,7 +65,7 @@ spec:
               value: CST-8
             - name : ENV
               value: prod
-          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-frontend"
+          image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-public-frontend:v"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
@@ -92,7 +92,7 @@ spec:
               subPath: default.conf
       dnsPolicy: ClusterFirst
       imagePullSecrets:
-        - name: aws-ecr
+        - name: sph-ack-test
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
