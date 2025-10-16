@@ -21,17 +21,8 @@ spec:
       labels:
         k8s.kuboard.cn/name: tencent-games
     spec:
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    k8s.kuboard.cn/name: magnolia-author-backend
-                topologyKey: kubernetes.io/hostname
-              weight: 100
       containers:
-        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/tencent-games"
+        - image: "registry.cn-chengdu.aliyuncs.com/sph-prd/tencent-games:v"
           imagePullPolicy: IfNotPresent
           name: nginx
           ports:
@@ -57,6 +48,8 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
+      imagePullSecrets:
+        - name: sph-ack-test
       volumes:
         - configMap:
             defaultMode: 420
