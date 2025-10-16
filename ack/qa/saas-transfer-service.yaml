@@ -1,0 +1,120 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    actions.github.com/k8s-deploy: >-
+      {"run":"11098760851","repository":"zbschools/saas-transfer-service","workflow":"Deploy
+      to qa and prd Env
+      [saas-transfer-service]","workflowFileName":"k8s-deploy-failed-workflow-annotation","jobName":"deploy-to-eks","createdBy":"ZhangJieNCS","runUri":"https://github.com/zbschools/saas-transfer-service/actions/runs/11098760851","commit":"66ec70caac4aa8b25950b5480ec8c552954ee1ef","lastSuccessRunCommit":"ca4668ea5f8f3c4a55d66cbc8ebffe921b189ffd","branch":"refs/heads/prd/req","deployTimestamp":1727667232600,"dockerfilePaths":{},"manifestsPaths":["https://github.com/zbschools/saas-transfer-service/blob/66ec70caac4aa8b25950b5480ec8c552954ee1ef/./yaml-template/qa/saas-transfer-service.yaml"],"helmChartPaths":[],"provider":"GitHub"}
+  labels:
+    k8s.kuboard.cn/name: saas-transfer-service
+    workflow: actions.github.com-k8s-deploy
+    workflowFriendlyName: Deploy_to_qa_and_prd_Env_saas-transfer-service
+  name: saas-transfer-service
+  namespace: zb-schools
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: saas-transfer-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
+        kubectl.kubernetes.io/restartedAt: "2024-10-08T12:10:26+08:00"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
+        vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
+        vault.hashicorp.com/log-level: debug
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/qa
+        vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/name: saas-transfer-service
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: saas-homework-service
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+        - command:
+            - /bin/bash
+            - "-ce"
+            - java  -Xms1024m -Xmx2048m -jar /opt/app/saas-transfer-service.jar
+          env:
+            - name: TZ
+              value: CST-8
+            - name: RUN_ENV
+              value: qa
+          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/saas-transfer-service"
+          imagePullPolicy: IfNotPresent
+          name: transfer
+          ports:
+            - containerPort: 8081
+              name: port8081
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 50
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8081
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: service-account-sph-zb-schools
+      serviceAccountName: service-account-sph-zb-schools
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    actions.github.com/k8s-deploy: >-
+      {"run":"11098760851","repository":"zbschools/saas-transfer-service","workflow":"Deploy
+      to qa and prd Env
+      [saas-transfer-service]","workflowFileName":"k8s-deploy-failed-workflow-annotation","jobName":"deploy-to-eks","createdBy":"ZhangJieNCS","runUri":"https://github.com/zbschools/saas-transfer-service/actions/runs/11098760851","commit":"66ec70caac4aa8b25950b5480ec8c552954ee1ef","lastSuccessRunCommit":"ca4668ea5f8f3c4a55d66cbc8ebffe921b189ffd","branch":"refs/heads/prd/req","deployTimestamp":1727667232600,"dockerfilePaths":{},"manifestsPaths":["https://github.com/zbschools/saas-transfer-service/blob/66ec70caac4aa8b25950b5480ec8c552954ee1ef/./yaml-template/qa/saas-transfer-service.yaml"],"helmChartPaths":[],"provider":"GitHub"}
+  labels:
+    k8s.kuboard.cn/name: saas-transfer-service
+    workflow: actions.github.com-k8s-deploy
+    workflowFriendlyName: Deploy_to_qa_and_prd_Env_saas-transfer-service
+  name: saas-transfer-service
+  namespace: zb-schools
+spec:
+  clusterIP: 172.20.211.72
+  clusterIPs:
+    - 172.20.211.72
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    k8s.kuboard.cn/name: saas-transfer-service
+  sessionAffinity: None
+  type: ClusterIP
