@@ -37,7 +37,7 @@ spec:
                   k8s.kuboard.cn/name: magnolia-author-backend
               topologyKey: kubernetes.io/hostname
       containers:
-        - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
+        - image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-author-frontend:v"
           imagePullPolicy: IfNotPresent
           name: magnolia-author-frontend
           ports:
@@ -64,7 +64,7 @@ spec:
               subPath: default.conf
       dnsPolicy: ClusterFirst
       imagePullSecrets:
-        - name: aws-ecr
+        - name: sph-ack-test
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
