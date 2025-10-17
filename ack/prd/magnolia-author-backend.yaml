@@ -20,6 +20,8 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        kms-agent-webhook-injector/inject: "true"
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: magnolia-author-backend
@@ -96,6 +98,7 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      serviceAccountName: zb-schools-sc
 ---
 apiVersion: v1
 kind: Service

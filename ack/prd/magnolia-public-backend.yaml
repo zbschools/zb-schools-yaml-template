@@ -33,7 +33,7 @@ spec:
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2024-11-19T17:16:12+08:00"       
+        kms-agent-webhook-injector/inject: "true"
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
@@ -111,6 +111,7 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      serviceAccountName: zb-schools-sc
 ---
 apiVersion: v1
 kind: Service
