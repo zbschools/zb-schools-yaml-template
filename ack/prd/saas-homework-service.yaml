@@ -92,6 +92,10 @@ spec:
               memory: 3Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /kms/kv-config
+              name: kv-config
+              subPath: kv-config
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: sph-ack-test
@@ -100,6 +104,14 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       serviceAccountName: zb-schools-sc
+      volumes: 
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: kv-config
+                path: kv-config
+            name: kv-config
+          name: kv-config
 ---
 apiVersion: v1
 kind: Service
