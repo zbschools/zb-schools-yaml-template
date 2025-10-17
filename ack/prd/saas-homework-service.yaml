@@ -55,7 +55,7 @@ spec:
         - command:
             - /bin/bash
             - "-ce"
-            - java  -Xms1g -Xmx2g -Dnewrelic.environment=prd -javaagent:/opt/app/newrelic.jar -jar /opt/app/saas-homework-service.jar -server.tomcat.max-threads=1500
+            - /opt/app/init.sh
           image: "registry.cn-chengdu.aliyuncs.com/sph-prd/saas-homework-service:v"
           imagePullPolicy: IfNotPresent
           env:
@@ -63,6 +63,16 @@ spec:
               value: "CST-8"
             - name: RUN_ENV
               value: "prd"
+            - name: RDS-HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: rds-host
+                  name: rds-info
+            - name: RDS-PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: rds-port
+                  name: rds-info
           name: homework
           ports:
             - containerPort: 8080
