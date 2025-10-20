@@ -62,7 +62,7 @@ spec:
             - name: TZ
               value: "CST-8"
             - name: RUN_ENV
-              value: "sit"
+              value: "inner"
           name: homework
           ports:
             - containerPort: 8080
