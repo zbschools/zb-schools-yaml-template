@@ -63,16 +63,6 @@ spec:
               value: "CST-8"
             - name: RUN_ENV
               value: "prd"
-            - name: RDS-HOST
-              valueFrom:
-                configMapKeyRef:
-                  key: rds-host
-                  name: rds-info
-            - name: RDS-PORT
-              valueFrom:
-                configMapKeyRef:
-                  key: rds-port
-                  name: rds-info
           name: homework
           ports:
             - containerPort: 8080
@@ -92,10 +82,6 @@ spec:
               memory: 3Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /kms/kv-config
-              name: kv-config
-              subPath: kv-config
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: sph-ack-test
@@ -104,14 +90,6 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       serviceAccountName: zb-schools-sc
-      volumes: 
-        - configMap:
-            defaultMode: 420
-            items:
-              - key: kv-config
-                path: kv-config
-            name: kv-config
-          name: kv-config
 ---
 apiVersion: v1
 kind: Service
