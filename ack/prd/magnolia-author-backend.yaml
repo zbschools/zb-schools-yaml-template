@@ -44,7 +44,7 @@ spec:
             - name: BASE_URL
               value: "https://www.zbschools.sg/authorFrontend"
             - name: ENV_TYPE
-              value: "prd"
+              value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaAuthor"
           image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-author-backend:v"

@@ -57,7 +57,7 @@ spec:
             - name: BASE_URL
               value: "https://www.zbschools.sg"
             - name: ENV_TYPE
-              value: "prd"
+              value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaPublic"
           image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-public-backend:v"
