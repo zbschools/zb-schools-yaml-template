@@ -1,0 +1,137 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-public-backend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-backend
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: magnolia-public-backend
+  labels:
+    k8s.kuboard.cn/name: magnolia-public-backend
+  name: magnolia-public-backend
+  namespace: zb-schools
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kms-agent-webhook-injector/inject: "true"
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/name: magnolia-public-backend
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: k8s.kuboard.cn/name
+                  operator: In
+                  values:
+                  - magnolia-author-backend
+                  - magnolia-public-backend
+                  - saas-homework-service
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - env:
+            - name: TZ
+              value: CST-8
+            - name: BASE_URL
+              value: "http://zb.codeclub.com.cn"
+            - name: ENV_TYPE
+              value: "sit"
+            - name: INSTANCE_TYPE
+              value: "magnoliaPublic"
+          image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-public-backend:v"
+          imagePullPolicy: IfNotPresent
+          name: magolia-public
+          ports:
+            - containerPort: 8080
+              name: port8080
+              protocol: TCP
+          startupProbe:
+            failureThreshold: 100000
+            httpGet:
+              path: >-
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120   
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2	
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: >-
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: >-
+                /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "3"
+              memory: 6Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: sph-ack-test
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: zb-schools-sc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    k8s.kuboard.cn/name: magnolia-public-backend
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 86400
+  type: ClusterIP

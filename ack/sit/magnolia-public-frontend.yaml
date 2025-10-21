@@ -1,0 +1,258 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: public-frontend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: magnolia-public-frontend
+  labels:
+    k8s.kuboard.cn/name: magnolia-public-frontend
+  name: magnolia-public-frontend
+  namespace: zb-schools
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/name: magnolia-public-frontend
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: saas-homework-service
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s.kuboard.cn/name: magnolia-public-frontend
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+        - command:
+            - bash
+            - /code/scripts/cron-job.sh
+          env:
+            - name : TZ
+              value: CST-8
+            - name : ENV
+              value: sit
+          image: "registry.cn-chengdu.aliyuncs.com/sph-prd/magnolia-public-frontend:v"
+          imagePullPolicy: IfNotPresent
+          name: nginx
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: volume-2hfc3
+              subPath: default.conf
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: sph-ack-test
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: default.conf
+                path: default.conf
+            name: public-nginx-conf
+          name: volume-2hfc3
+---
+apiVersion: v1
+data:
+  default.conf: |-
+    gzip_comp_level 5;
+    gzip_min_length 3;
+    gzip_proxied any;
+    gzip_vary on;
+    gzip_types
+       application/atom+xml
+       application/javascript
+       application/json
+       application/ld+json
+       application/manifest+json
+       application/rss+xml
+       application/vnd.geo+json
+       application/vnd.ms-fontobject
+       application/x-font-ttf
+       application/x-web-app-manifest+json
+       application/xhtml+xml
+       application/xml
+       application/octet-stream
+       font/opentype
+       image/bmp
+       image/png
+       image/svg+xml
+       image/x-icon
+       text/cache-manifest
+       text/css
+       text/plain
+       text/vcard
+       text/vnd.rim.location.xloc
+       text/vtt
+       text/x-component
+       text/x-cross-domain-policy;
+    proxy_max_temp_file_size 1024m;
+    server {
+            listen       80;
+            listen  [::]:80;
+            server_name  localhost;
+            client_max_body_size 1000M;
+
+            location / {
+                    root /usr/share/nginx/html;
+                    index index.html;
+                    expires -1;
+                    client_max_body_size 1000m;
+                    try_files $uri $uri/ /index.html @rewrites;
+
+                    location ~* \.(js|css)$ {
+                        expires 7d;
+                        add_header Cache-Control "public, no-cache, max-age=604800";
+                    }
+                }
+
+            location /lms/file/uploadFile {
+                proxy_pass http://saas-homework-service-svc:8080/file/uploadFile;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+            
+            location /lms/teacherClass {
+                proxy_pass http://saas-homework-service-svc:8080/teacherClass;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            location /lms/file/getRedirectUrl {
+                  proxy_pass http://saas-homework-service-svc:8080/file/getRedirectUrl;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+            }
+            
+            location /lms/file/getMagnoliaRedirectUrl {
+                  proxy_pass http://saas-homework-service-svc:8080/file/getMagnoliaRedirectUrl;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+
+            location /lms/yd/textToSpeech {
+                  proxy_pass http://saas-homework-service-svc:8080/yd/textToSpeech;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+            }
+
+            location /lms/excel {
+                  proxy_pass http://saas-homework-service-svc:8080/excel;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+            }
+            location /share/ {
+              proxy_pass http://magnolia-public-backend-svc:8080/magnoliaPublic/.rest/delivery/share/v1/article/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+           }
+           location /games/ {
+              proxy_pass http://magnolia-public-games-svc:80/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+           }
+
+           location @rewrites {
+                rewrite ^(.+)$ /index.html break;
+            }
+            error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+                root /usr/share/nginx/html;
+            }
+    }
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: public-nginx-conf
+  namespace: zb-schools
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: zb-schools
+  name: magnolia-public-frontend-svc
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    k8s.kuboard.cn/name: magnolia-public-frontend
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 86400
+
