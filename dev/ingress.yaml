@@ -18,7 +18,7 @@ metadata:
         "FixedResponseConfig": {
           "ContentType": "text/plain",
           "StatusCode": "404",
-          "MessageBody": "Service not found or unavailable"
+          "MessageBody": "Service Not Found or Unavailable"
         }
       }
 spec:
