@@ -12,6 +12,15 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-dev"
     alb.ingress.kubernetes.io/security-groups: "sg-0c685a29fc061aac0, sg-047c915dc3f6c01e0, sg-09c7f1500155dcfd6"
     alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:767397694429:regional/webacl/zb-schools-dev-ingress-alb-wafv2/76d440b1-367f-4939-a4ef-11d0763e7b2c
+    alb.ingress.kubernetes.io/actions.unhealthy-response: |
+      {
+        "Type": "fixed-response",
+        "FixedResponseConfig": {
+          "ContentType": "text/plain",
+          "StatusCode": "404",
+          "MessageBody": "Service not found or unavailable"
+        }
+      }
 spec:
   ingressClassName: alb
   rules:
