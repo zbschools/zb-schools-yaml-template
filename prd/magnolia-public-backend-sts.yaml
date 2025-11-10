@@ -27,7 +27,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
         vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
         vault.hashicorp.com/log-level: debug
-        vault.hashicorp.com/namespace: admin/engr/zb_schools/dev
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/prd
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
@@ -51,12 +51,12 @@ spec:
         - name: TZ
           value: CST-8
         - name: BASE_URL
-          value: https://sit.zbschools.sg
+          value: https://www.zbschools.sg
         - name: ENV_TYPE
-          value: sit
+          value: prd
         - name: INSTANCE_TYPE
           value: magnoliaPublic
-        image: 767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend
+        image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 6
@@ -83,11 +83,11 @@ spec:
           timeoutSeconds: 2
         resources:
           limits:
-            cpu: "4"
-            memory: 12Gi
-          requests:
-            cpu: "4"
-            memory: 12Gi
+           cpu: "14"
+              memory: 28Gi
+            requests:
+              cpu: "14"
+              memory: 28Gi
         startupProbe:
           failureThreshold: 100000
           httpGet:
@@ -145,7 +145,7 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-public-backend-sts
+    k8s.kuboard.cn/name: magnolia-public-backend
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
