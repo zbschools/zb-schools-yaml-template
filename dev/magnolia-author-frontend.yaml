@@ -34,7 +34,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  k8s.kuboard.cn/name: magnolia-author-backend
+                  k8s.kuboard.cn/name: magnolia-author-backend-sts
               topologyKey: kubernetes.io/hostname
       containers:
         - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
