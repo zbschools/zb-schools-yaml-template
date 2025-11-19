@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-generation: 2
+  generation: 2
   labels:
     k8s.kuboard.cn/name: magnolia-author-backend-sts
   name: magnolia-author-backend-sts
