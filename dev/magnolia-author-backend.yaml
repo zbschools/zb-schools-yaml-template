@@ -1,29 +1,28 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: magnolia-author-backend
+  generation: 2
   labels:
-    k8s.kuboard.cn/name: magnolia-author-backend
-  name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-author-backend-sts
+  name: magnolia-author-backend-sts
   namespace: zb-schools
 spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
   replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
-
+      k8s.kuboard.cn/name: magnolia-author-backend-sts
+  serviceName: magnolia-author-backend-sts-svc
   template:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:41:20+08:00"
+        kubectl.kubernetes.io/restartedAt: "2025-11-19T03:41:20+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
@@ -33,7 +32,7 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend
+        k8s.kuboard.cn/name: magnolia-author-backend-sts
     spec:
       affinity:
         podAntiAffinity:
@@ -83,6 +82,9 @@ spec:
               memory: 12Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+             - mountPath: /usr/local/tomcat/webapps/repositories
+               name: pvc-mgnl-author
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -90,7 +92,26 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      name: pvc-mgnl-author
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: gp2
+      volumeMode: Filesystem    
 ---
 apiVersion: v1
 kind: Service
@@ -106,3 +127,26 @@ spec:
   selector:
     k8s.kuboard.cn/name: magnolia-author-backend
   sessionAffinity: None
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-author-backend-sts-svc
+  namespace: zb-schools
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: author
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    k8s.kuboard.cn/name: magnolia-author-backend-sts
+  sessionAffinity: None
+  type: ClusterIP

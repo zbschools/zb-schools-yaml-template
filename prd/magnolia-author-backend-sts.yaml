@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-generation: 2
+  generation: 2
   labels:
     k8s.kuboard.cn/name: magnolia-author-backend-sts
   name: magnolia-author-backend-sts
@@ -29,7 +29,7 @@ spec:
         vault.hashicorp.com/agent-inject-secret-kv-config: "zb-schools/kv/config"
         vault.hashicorp.com/agent-inject-secret-kv-aksk: "zb-schools/kv/aksk"
         vault.hashicorp.com/log-level: "debug"
-        vault.hashicorp.com/namespace: "admin/engr/zb_schools/qa"
+        vault.hashicorp.com/namespace: "admin/engr/zb_schools/prd"
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: magnolia-author-backend-sts
@@ -37,24 +37,24 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: k8s.kuboard.cn/name
-                operator: In
-                values:
-                - magnolia-author-backend
-                - saas-homework-service
-            topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchExpressions:
+                - key: k8s.kuboard.cn/name
+                  operator: In
+                  values:
+                  - magnolia-public-backend
+                  - saas-homework-service
+              topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
               value: CST-8
+            - name: BASE_URL
+              value: "https://www.zbschools.sg/authorFrontend"
             - name: ENV_TYPE
-              value: "qa"
+              value: "prd"
             - name: INSTANCE_TYPE
               value: "magnoliaAuthor"
-            - name: BASE_URL
-              value: "https://uat.zbschools.sg/authorFrontend"
           image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-backend
@@ -62,8 +62,8 @@ spec:
             - containerPort: 8080
               name: port8080
               protocol: TCP
-          readinessProbe:
-            failureThreshold: 30
+          startupProbe:
+            failureThreshold: 100000
             httpGet:
               path: >-
                 /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
@@ -72,14 +72,34 @@ spec:
             initialDelaySeconds: 120
             periodSeconds: 10
             successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: >-
+                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: >-
+                /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "4"
-              memory: 12Gi
+              cpu: "12"
+              memory: 24Gi
             requests:
-              cpu: "4"
-              memory: 12Gi
+              cpu: "12"
+              memory: 24Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -111,7 +131,7 @@ spec:
         requests:
           storage: 5Gi
       storageClassName: gp2
-      volumeMode: Filesystem
+      volumeMode: Filesystem 
 ---
 apiVersion: v1
 kind: Service
