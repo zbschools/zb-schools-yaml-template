@@ -22,7 +22,7 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:41:20+08:00"
+        kubectl.kubernetes.io/restartedAt: "2025-11-20T13:41:20+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
@@ -95,11 +95,11 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "4"
+              memory:12Gi
             requests:
-              cpu: "12"
-              memory: 24Gi
+              cpu: "4"
+              memory: 12Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -129,7 +129,7 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 5Gi
+          storage: 10Gi
       storageClassName: gp2
       volumeMode: Filesystem 
 ---
