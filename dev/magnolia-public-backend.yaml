@@ -50,6 +50,8 @@ spec:
       - env:
         - name: TZ
           value: CST-8
+        - name: DB_NAME_PUBLIC
+          value: mgnl_public
         - name: BASE_URL
           value: https://sit.zbschools.sg
         - name: ENV_TYPE
