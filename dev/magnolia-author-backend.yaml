@@ -42,7 +42,7 @@ spec:
                 - key: k8s.kuboard.cn/name
                   operator: In
                   values:
-                  - magnolia-public-backend
+                  - magnolia-public-backend-sts
                   - saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
@@ -84,7 +84,7 @@ spec:
           terminationMessagePolicy: File
           volumeMounts:
              - mountPath: /usr/local/tomcat/webapps/repositories
-               name: pvc-mgnl-author
+               name: mgnl-author-pvc
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -103,13 +103,13 @@ spec:
     kind: PersistentVolumeClaim
     metadata:
       creationTimestamp: null
-      name: pvc-mgnl-author
+      name: mgnl-author-pvc
     spec:
       accessModes:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 5Gi
+          storage: 6Gi
       storageClassName: gp2
       volumeMode: Filesystem    
 ---
@@ -125,7 +125,7 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
+    k8s.kuboard.cn/name: magnolia-author-backend-sts
   sessionAffinity: None
 --- 
 apiVersion: v1
