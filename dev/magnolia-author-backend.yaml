@@ -109,8 +109,8 @@ spec:
       - ReadWriteOnce
       resources:
         requests:
-          storage: 6Gi
-      storageClassName: gp2
+          storage: 5Gi
+      storageClassName: gp3
       volumeMode: Filesystem    
 ---
 apiVersion: v1
