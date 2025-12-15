@@ -1,0 +1,182 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  generation: 2
+  labels:
+    k8s.kuboard.cn/name: magnolia-public-backend-3-sts
+  name: magnolia-public-backend-3-sts
+  namespace: zb-schools
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:   
+      app: magnolia-public-backend    
+      appn: magnolia-public-backend-3-sts
+  serviceName: magnolia-public-backend-3-headless
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2025-11-07T17:16:12+08:00"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
+        vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
+        vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
+        vault.hashicorp.com/log-level: debug
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/dev
+        vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
+      creationTimestamp: null
+      labels:
+        app: magnolia-public-backend
+        appn: magnolia-public-backend-3-sts
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: k8s.kuboard.cn/name
+                operator: In
+                values:
+                - magnolia-author-backend
+                - magnolia-public-backend-1-sts
+                - magnolia-public-backend-2-sts
+                - magnolia-public-backend-3-sts
+                - saas-homework-service
+            topologyKey: kubernetes.io/hostname
+      automountServiceAccountToken: true
+      containers:
+      - env:
+        - name: TZ
+          value: CST-8
+        - name: DB_NAME_PUBLIC
+          value: mgnl_public_3
+        - name: BASE_URL
+          value: https://sit.zbschools.sg
+        - name: ENV_TYPE
+          value: sit
+        - name: INSTANCE_TYPE
+          value: magnoliaPublic
+        image: 767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: magolia-public
+        ports:
+        - containerPort: 8080
+          name: port8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "4"
+            memory: 12Gi
+          requests:
+            cpu: "4"
+            memory: 12Gi
+        startupProbe:
+          failureThreshold: 100000
+          httpGet:
+            path: /magnoliaPublic/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/local/tomcat/webapps/repositories
+          name: pvc-mgnl-public-3
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: service-account-sph-zb-schools
+      serviceAccountName: service-account-sph-zb-schools
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      name: pvc-mgnl-public-3
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: gp3
+      volumeMode: Filesystem     
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-3-headless
+  namespace: zb-schools
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: public
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    appn: magnolia-public-backend-3-sts
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-public-backend-svc3
+  namespace: zb-schools
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: public
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    appn: magnolia-public-backend-3-sts
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 86400
+  type: ClusterIP

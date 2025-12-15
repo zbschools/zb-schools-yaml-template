@@ -1,0 +1,118 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  generation: 2
+  labels:
+    k8s.kuboard.cn/name: magnolia-author-backend-sts
+  name: magnolia-author-backend-sts
+  namespace: zb-schools
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-author-backend-sts
+  serviceName: magnolia-author-backend-sts-svc
+  template:
+    metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
+        kubectl.kubernetes.io/restartedAt: "2025-11-19T03:41:20+08:00"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
+        vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
+        vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
+        vault.hashicorp.com/log-level: debug
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/dev
+        vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/name: magnolia-author-backend-sts
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: k8s.kuboard.cn/name
+                operator: In
+                values:
+                - magnolia-public-backend-sts
+                - saas-homework-service
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - env:
+        - name: TZ
+          value: CST-8
+        - name: BASE_URL
+          value: https://sit.zbschools.sg/authorFrontend
+        - name: ENV_TYPE
+          value: sit
+        - name: INSTANCE_TYPE
+          value: magnoliaAuthor
+        image: 767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:635a8ab5
+        imagePullPolicy: IfNotPresent
+        name: magolia-backend
+        ports:
+        - containerPort: 8080
+          name: port8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /magnoliaAuthor/.resources/defaultMagnoliaLoginForm/img/logo-magnolia.gif
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "4"
+            memory: 12Gi
+          requests:
+            cpu: "4"
+            memory: 12Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/local/tomcat/webapps/repositories
+          name: mgnl-author-pvc
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: aws-ecr
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: service-account-sph-zb-schools
+      serviceAccountName: service-account-sph-zb-schools
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      name: mgnl-author-pvc
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: gp3
+      volumeMode: Filesystem
+    status:
+      phase: Pending
