@@ -59,7 +59,8 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend
+        app: magnolia-author-backend
+        appn: magnolia-author-backend-1
     spec:
       affinity:
         podAntiAffinity:
@@ -87,7 +88,7 @@ spec:
               value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaAuthor"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:26911307"
           imagePullPolicy: IfNotPresent
           name: magolia-backend
           ports:
