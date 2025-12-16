@@ -88,7 +88,7 @@ spec:
               value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaAuthor"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:26911307"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-backend
           ports:

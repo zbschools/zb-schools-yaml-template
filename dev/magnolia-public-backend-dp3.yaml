@@ -87,7 +87,7 @@ spec:
               value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaPublic"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend:b722b065"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-public
           ports:
