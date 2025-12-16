@@ -4,8 +4,10 @@ kind: Deployment
 metadata:
   annotations:
     k8s.kuboard.cn/workload: saas-homework-service
+    appn: saas-homework-service
   labels:
     k8s.kuboard.cn/name: saas-homework-service
+    appn: saas-homework-service
   name: saas-homework-service
   namespace: zb-schools
 spec:
@@ -15,6 +17,7 @@ spec:
   selector:
     matchLabels:
       k8s.kuboard.cn/name: saas-homework-service
+      appn: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -35,13 +38,14 @@ spec:
       creationTimestamp: null
       labels:
         k8s.kuboard.cn/name: saas-homework-service
+        appn: saas-homework-service
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                - key: k8s.kuboard.cn/name
+                - key: app
                   operator: In
                   values:
                   - magnolia-author-backend
