@@ -1,18 +1,44 @@
 ---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3-ebs
+provisioner: kubernetes.io/aws-ebs
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  type: gp3
+  fsType: ext4
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-author-1
+  namespace: zb-schools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp3-ebs
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    k8s.kuboard.cn/workload: magnolia-author-backend
+    app: magnolia-author-backend
+    appn: magnolia-author-backend-1
   labels:
-    k8s.kuboard.cn/name: magnolia-author-backend
+    app: magnolia-author-backend
+    appn: magnolia-author-backend-1
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-backend
+      app: magnolia-author-backend
+      appn: magnolia-author-backend-1
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -32,23 +58,29 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/qa"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend
+        app: magnolia-author-backend
+        appn: magnolia-author-backend-1
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: k8s.kuboard.cn/name
+              - key: appn
                 operator: In
                 values:
-                - magnolia-author-backend
+                - magnolia-author-backend-1
+                - magnolia-public-backend-1
+                - magnolia-public-backend-2
+                - magnolia-public-backend-3
                 - saas-homework-service
             topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
               value: CST-8
+            - name: DB_NAME_PUBLIC
+              value: mgnl_author
             - name: ENV_TYPE
               value: "qa"
             - name: INSTANCE_TYPE
@@ -82,6 +114,13 @@ spec:
               memory: 12Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /usr/local/tomcat/webapps/repositories
+              name: pvc-author
+      volumes:
+        - name: pvc-author
+          persistentVolumeClaim:
+             claimName: pvc-author-1
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -103,7 +142,7 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend
+     app: magnolia-author-backend
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
