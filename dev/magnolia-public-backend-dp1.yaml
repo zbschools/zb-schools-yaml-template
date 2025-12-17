@@ -2,8 +2,8 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: ebs-gp3
-provisioner: ebs.csi.aws.com
+  name: gp3-ebs
+provisioner: kubernetes.io/aws-ebs
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   type: gp3
@@ -17,7 +17,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ebs-gp3
+  storageClassName: gp3-ebs
   resources:
     requests:
       storage: 5Gi
