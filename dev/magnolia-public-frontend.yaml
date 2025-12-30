@@ -201,6 +201,13 @@ data:
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
               proxy_set_header X-Forwarded-Proto $scheme;
         }
+        location /lms/tools {
+              proxy_pass http://saas-homework-service-svc:8080/tools;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+        }
         location /transfer {
               proxy_pass http://saas-transfer-service:8081;
               proxy_set_header Host $host;
