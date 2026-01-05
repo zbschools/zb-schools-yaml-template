@@ -86,6 +86,8 @@ spec:
               value: "https://sit.zbschools.sg/authorFrontend"
             - name: ENV_TYPE
               value: "sit"
+            - name: "POD"
+              value: "magnoliaAuthor"
             - name: INSTANCE_TYPE
               value: "magnoliaAuthor"
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"

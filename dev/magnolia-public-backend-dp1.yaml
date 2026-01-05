@@ -85,6 +85,8 @@ spec:
               value: "https://sit.zbschools.sg"
             - name: ENV_TYPE
               value: "sit"
+            - name: POD
+              value: "magnoliaPublic"
             - name: INSTANCE_TYPE
               value: "magnoliaPublic"
           image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
