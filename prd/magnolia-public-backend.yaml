@@ -20,7 +20,7 @@ metadata:
   name: magnolia-public-backend
   namespace: zb-schools
 spec:
-  replicas: 3
+  replicas: 6
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -129,8 +129,5 @@ spec:
       targetPort: 8080
   selector:
     k8s.kuboard.cn/name: magnolia-public-backend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+  sessionAffinity: None
   type: ClusterIP

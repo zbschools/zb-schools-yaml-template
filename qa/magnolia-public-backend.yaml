@@ -146,10 +146,7 @@ spec:
       targetPort: 8080
   selector:
     k8s.kuboard.cn/name: magnolia-public-backend-sts
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+  sessionAffinity: None
   type: ClusterIP
 --- 
 apiVersion: v1
