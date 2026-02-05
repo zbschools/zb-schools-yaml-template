@@ -82,10 +82,8 @@ data:
         listen  [::]:80;
         server_name  localhost;
         client_max_body_size 1000M;
-        access_log /mnt/access.log main;
-        error_log /mnt/error.log warn;
 
-         location / {
+        location / {
             root /usr/share/nginx/html;
             index  index.html;
             client_max_body_size 1000m;
@@ -119,7 +117,4 @@ spec:
   type: ClusterIP
   selector:
     k8s.kuboard.cn/name: magnolia-author-frontend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+  sessionAffinity: Node

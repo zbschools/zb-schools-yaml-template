@@ -6,21 +6,12 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=0"
     alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,access_logs.s3.enabled=true,access_logs.s3.bucket=s3-sph-zb-schools-dev-access-log-bucket
     alb.ingress.kubernetes.io/subnets: "subnet-07ba408e3b3814115, subnet-024dd3663cbeca60b, subnet-0689fa37eab75f700"
     alb.ingress.kubernetes.io/load-balancer-name: "ingress-lb-zb-schools-dev"
     alb.ingress.kubernetes.io/security-groups: "sg-0c685a29fc061aac0, sg-047c915dc3f6c01e0, sg-09c7f1500155dcfd6"
     alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-southeast-1:767397694429:regional/webacl/zb-schools-dev-ingress-alb-wafv2/76d440b1-367f-4939-a4ef-11d0763e7b2c
-    alb.ingress.kubernetes.io/actions.unhealthy-response: |
-      {
-        "Type": "fixed-response",
-        "FixedResponseConfig": {
-          "ContentType": "text/plain",
-          "StatusCode": "404",
-          "MessageBody": "Service Not Found or Unavailable"
-        }
-      }
 spec:
   ingressClassName: alb
   rules:

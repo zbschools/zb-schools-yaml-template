@@ -1,18 +1,8 @@
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: gp3-ebs
-provisioner: kubernetes.io/aws-ebs
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  type: gp3
-  fsType: ext4
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-public-1
+  name: pvc-public-3
   namespace: zb-schools
 spec:
   accessModes:
@@ -20,75 +10,59 @@ spec:
   storageClassName: gp3-ebs
   resources:
     requests:
-      storage: 5Gi
+      storage: 10Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet 
 metadata:
-  annotations:
-    app: magnolia-public-backend
+  generation: 2
   labels:
     app: magnolia-public-backend
-    appn: magnolia-public-backend-1
-  name: magnolia-public-backend-1
+    appn: magnolia-public-backend-3
+  name: magnolia-public-backend-3
   namespace: zb-schools
 spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
   replicas: 1
-  revisionHistoryLimit: 10
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: magnolia-public-backend
-      appn: magnolia-public-backend-1
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+      appn: magnolia-public-backend-3
+  serviceName: magnolia-public-backend-3-svc
   template:
     metadata:
       annotations:
-        karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-25T17:16:12+08:00"
+        kubectl.kubernetes.io/restartedAt: "2026-02-05T14:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
         vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
         vault.hashicorp.com/log-level: debug
-        vault.hashicorp.com/namespace: admin/engr/zb_schools/qa
+        vault.hashicorp.com/namespace: admin/engr/zb_schools/prd
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
         app: magnolia-public-backend
-        appn: magnolia-public-backend-1
+        appn: magnolia-public-backend-3
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: appn
-                  operator: In
-                  values:
-                  - magnolia-author-backend-1
-                  - magnolia-public-backend-1
-                  - magnolia-public-backend-2
-                  - magnolia-public-backend-3
-                  - saas-homework-service
-            topologyKey: kubernetes.io/hostname
       containers:
         - env:
             - name: TZ
               value: CST-8
             - name: DB_NAME_PUBLIC
-              value: mgnl_public_1
+              value: mgnl_public_3
+            - name: BASE_URL
+              value: "https://www.zbschools.sg"
             - name: ENV_TYPE
-              value: "qa"
+              value: "prd"
             - name: INSTANCE_TYPE
               value: "magnoliaPublic"
-            - name: BASE_URL
-              value: "https://uat.zbschools.sg"
           image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: magolia-public
           ports:
             - containerPort: 8080
@@ -115,13 +89,6 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 2
-          resources:
-            limits:
-              cpu: "4"
-              memory: 12Gi
-            requests:
-              cpu: "4"
-              memory: 12Gi
           livenessProbe:
             failureThreshold: 6
             httpGet:
@@ -132,6 +99,13 @@ spec:
             periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "12"
+              memory: 24Gi
+            requests:
+              cpu: "12"
+              memory: 24Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -140,7 +114,7 @@ spec:
       volumes:
         - name: pvc-public
           persistentVolumeClaim:
-             claimName: pvc-public-1
+             claimName: pvc-public-3
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -154,7 +128,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-backend-svc
+  name: magnolia-public-backend-3-svc
   namespace: zb-schools
 spec:
   internalTrafficPolicy: Cluster
@@ -167,32 +141,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: magnolia-public-backend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: magnolia-public-backend-svc1
-  namespace: zb-schools
-spec:
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: public
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    appn: magnolia-public-backend-1
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    appn: magnolia-public-backend-3
+  sessionAffinity: None
   type: ClusterIP

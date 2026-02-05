@@ -4,8 +4,9 @@ kind: StatefulSet
 metadata:
   generation: 2
   labels:
-    k8s.kuboard.cn/name: magnolia-author-backend-sts
-  name: magnolia-author-backend-sts
+    app: magnolia-author-backend
+    appn: magnolia-author-backend-1
+  name: magnolia-author-backend
   namespace: zb-schools
 spec:
   persistentVolumeClaimRetentionPolicy:
@@ -16,8 +17,9 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-backend-sts
-  serviceName: magnolia-author-backend-sts-svc
+      app: magnolia-author-backend
+      appn: magnolia-author-backend-1
+  serviceName: magnolia-author-backend-1-svc
   template:
     metadata:
       annotations:
@@ -32,17 +34,19 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/qa"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-backend-sts
+        app: magnolia-author-backend
+        appn: magnolia-author-backend-1
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: k8s.kuboard.cn/name
+              - key: app
                 operator: In
                 values:
                 - magnolia-author-backend
+                - magnolia-public-backend
                 - saas-homework-service
             topologyKey: kubernetes.io/hostname
       containers:
@@ -55,7 +59,7 @@ spec:
               value: "magnoliaAuthor"
             - name: BASE_URL
               value: "https://uat.zbschools.sg/authorFrontend"
-          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend:1.2.144.20251212"
+          image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-backend"
           imagePullPolicy: IfNotPresent
           name: magolia-backend
           ports:
@@ -84,7 +88,7 @@ spec:
           terminationMessagePolicy: File
           volumeMounts:
              - mountPath: /usr/local/tomcat/webapps/repositories
-               name: pvc-mgnl-author
+               name: pvc-author
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -103,14 +107,14 @@ spec:
     kind: PersistentVolumeClaim
     metadata:
       creationTimestamp: null
-      name: pvc-mgnl-author
+      name: pvc-author
     spec:
       accessModes:
       - ReadWriteOnce
       resources:
         requests:
           storage: 5Gi
-      storageClassName: gp2
+      storageClassName: gp3
       volumeMode: Filesystem
 ---
 apiVersion: v1
@@ -125,16 +129,13 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend-sts
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: magnolia-author-backend
+  sessionAffinity: None
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-author-backend-sts-svc
+  name: magnolia-author-backend-1-svc
   namespace: zb-schools
 spec:
   clusterIP: None
@@ -150,6 +151,6 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-author-backend-sts
+    appn: magnolia-author-backend-1
   sessionAffinity: None
   type: ClusterIP
