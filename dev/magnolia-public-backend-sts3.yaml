@@ -1,17 +1,4 @@
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-public-3
-  namespace: zb-schools
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: gp3-ebs
-  resources:
-    requests:
-      storage: 5Gi
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -134,26 +121,6 @@ spec:
       serviceAccount: service-account-sph-zb-schools
       serviceAccountName: service-account-sph-zb-schools
       terminationGracePeriodSeconds: 30
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: magnolia-public-backend-svc
-  namespace: zb-schools
-spec:
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: public
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    app: magnolia-public-backend
-  sessionAffinity: None
-  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
