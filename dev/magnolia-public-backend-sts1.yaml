@@ -39,12 +39,7 @@ spec:
     matchLabels:
       app: magnolia-public-backend
       appn: magnolia-public-backend-1
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
-    
+  serviceName: magnolia-public-backend-1-svc
   template:
     metadata:
       annotations:
@@ -86,7 +81,7 @@ spec:
               value: "sit"
             - name: INSTANCE_TYPE
               value: "magnoliaPublic"
-          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
+          image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend1"
           imagePullPolicy: IfNotPresent
           name: magolia-public
           ports:

@@ -29,12 +29,7 @@ spec:
     matchLabels:
       app: magnolia-public-backend
       appn: magnolia-public-backend-3
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
-    
+  serviceName: magnolia-public-backend-3-svc
   template:
     metadata:
       annotations:
