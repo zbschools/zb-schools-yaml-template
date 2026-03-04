@@ -60,6 +60,7 @@ spec:
         app: magnolia-author-backend
         appn: magnolia-author-backend-1
     spec:
+      expireAfter: Never
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

@@ -45,6 +45,7 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-public-backend
     spec:
+      expireAfter: Never
       containers:
         - env:
             - name: TZ
