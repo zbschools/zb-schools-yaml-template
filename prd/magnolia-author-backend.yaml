@@ -34,7 +34,6 @@ spec:
       labels:
         k8s.kuboard.cn/name: magnolia-author-backend
     spec:
-      expireAfter: Never
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
