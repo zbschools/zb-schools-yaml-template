@@ -28,11 +28,12 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 3
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2024-11-19T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
