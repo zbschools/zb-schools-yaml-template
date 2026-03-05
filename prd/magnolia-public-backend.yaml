@@ -5,7 +5,7 @@ metadata:
   name: magnolia-public-backend-pdb
   namespace: zb-schools
 spec:
-  minAvailable: 1
+  minAvailable: 2
   selector:
     matchLabels:
       k8s.kuboard.cn/name: magnolia-public-backend
