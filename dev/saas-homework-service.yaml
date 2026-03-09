@@ -70,11 +70,13 @@ spec:
               protocol: TCP
           readinessProbe:
             failureThreshold: 3
+            httpGet:
+              path: data/getCourseProject
+              port: 8080
+              scheme: HTTP
             initialDelaySeconds: 50
             periodSeconds: 5
             successThreshold: 1
-            tcpSocket:
-              port: 8080
             timeoutSeconds: 2
           resources:
             limits:
