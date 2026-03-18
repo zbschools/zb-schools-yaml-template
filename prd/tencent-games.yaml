@@ -136,7 +136,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-games-svc
+  name: tencent-games-svc
   namespace: zb-schools
 spec:
   ports:
@@ -147,7 +147,4 @@ spec:
   selector:
     k8s.kuboard.cn/name: tencent-games
   type: ClusterIP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+  sessionAffinity: None
