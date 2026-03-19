@@ -148,7 +148,7 @@ data:
             client_max_body_size 1000M;
 
             location / {
-                    root /usr/share/nginx/html;
+                    root /usr/share/nginx/html/prd;
                     index index.html;
                     expires -1;
                     client_max_body_size 1000m;
@@ -228,7 +228,7 @@ data:
             }
             error_page 500 502 503 504 /50x.html;
             location = /50x.html {
-                root /usr/share/nginx/html;
+                root /usr/share/nginx/html/prd;
             }
     }
 kind: ConfigMap
