@@ -5,7 +5,7 @@ metadata:
   name: nginx-mobile-pdb
   namespace: zb-schools
 spec:
-  minAvailable: 1
+  minAvailable: 2
   selector:
     matchLabels:
       k8s.kuboard.cn/name: nginx-mobile
@@ -24,11 +24,13 @@ spec:
       k8s.kuboard.cn/name: nginx-mobile
   strategy:
     rollingUpdate:
-      maxSurge: 3
+      maxSurge: 2
       maxUnavailable: 0
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
       labels:
         k8s.kuboard.cn/name: nginx-mobile
     spec:
