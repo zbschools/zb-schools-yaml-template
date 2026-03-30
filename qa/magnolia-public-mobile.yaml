@@ -31,7 +31,7 @@ spec:
   template:
     metadata:
       annotations:
-        karpenter.sh/do-not-disrupt: "false"
+        karpenter.sh/do-not-disrupt: "true"
       labels:
         k8s.kuboard.cn/name: nginx-mobile
     spec:

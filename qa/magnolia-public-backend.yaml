@@ -1,4 +1,15 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-public-backend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-backend-sts
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -21,6 +32,7 @@ spec:
   template:
     metadata:
       annotations:
+        karpenter.sh/do-not-disrupt: "true"
         kubectl.kubernetes.io/restartedAt: "2025-11-07T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
