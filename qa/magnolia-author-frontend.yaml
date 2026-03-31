@@ -1,11 +1,22 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-author-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: magnolia-author-frontend
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-author-frontend
   labels:
-    k8s.kuboard.cn/name: magnolia-author-frontend
+    app: magnolia-author-frontend
   name: magnolia-author-frontend
   namespace: zb-schools
 spec:
@@ -14,7 +25,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-frontend
+      app: magnolia-author-frontend
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -27,14 +38,14 @@ spec:
         kubectl.kubernetes.io/restartedAt: "2024-06-26T14:15:57+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-frontend
+        app: magnolia-author-frontend
     spec:
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  k8s.kuboard.cn/name: magnolia-author-backend-sts
+                  app: magnolia-author-backend-sts
               topologyKey: kubernetes.io/hostname
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
@@ -122,8 +133,5 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-frontend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: magnolia-author-frontend
+  sessionAffinity: None

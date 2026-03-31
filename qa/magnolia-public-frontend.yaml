@@ -8,7 +8,7 @@ spec:
   minAvailable: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-frontend
+      app: magnolia-public-frontend
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -16,7 +16,7 @@ metadata:
   annotations:
     k8s.kuboard.cn/workload: magnolia-public-frontend
   labels:
-    k8s.kuboard.cn/name: magnolia-public-frontend
+    app: magnolia-public-frontend
   name: magnolia-public-frontend
   namespace: zb-schools
 spec:
@@ -24,7 +24,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-frontend
+      app: magnolia-public-frontend
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -37,7 +37,7 @@ spec:
         kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-public-frontend
+        app: magnolia-public-frontend
     spec:
       affinity:
         podAffinity:
@@ -45,7 +45,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: saas-homework-service
+                    app: saas-homework-service
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -250,5 +250,5 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-public-frontend
+    app: magnolia-public-frontend
   sessionAffinity: None

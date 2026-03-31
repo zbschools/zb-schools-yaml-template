@@ -1,11 +1,21 @@
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-author-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: magnolia-author-backend
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   generation: 2
   labels:
     app: magnolia-author-backend
-    appn: magnolia-author-backend-1
   name: magnolia-author-backend
   namespace: zb-schools
 spec:
@@ -18,8 +28,7 @@ spec:
   selector:
     matchLabels:
       app: magnolia-author-backend
-      appn: magnolia-author-backend-1
-  serviceName: magnolia-author-backend-1-svc
+  serviceName: magnolia-author-headless-svc
   template:
     metadata:
       annotations:
@@ -35,7 +44,6 @@ spec:
       creationTimestamp: null
       labels:
         app: magnolia-author-backend
-        appn: magnolia-author-backend-1
     spec:
       affinity:
         podAntiAffinity:
@@ -135,22 +143,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-author-backend-1-svc
+  name: magnolia-author-headless-svc
   namespace: zb-schools
 spec:
   clusterIP: None
-  clusterIPs:
-  - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
   ports:
   - name: author
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    appn: magnolia-author-backend-1
+    app: magnolia-author-backend
   sessionAffinity: None
   type: ClusterIP

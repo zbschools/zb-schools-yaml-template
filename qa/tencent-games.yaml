@@ -5,12 +5,12 @@ metadata:
   name: tencent-games 
   namespace: zb-schools
   labels:
-    k8s.kuboard.cn/name: tencent-games
+    app: tencent-games
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: tencent-games
+      app: tencent-games
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,7 +21,7 @@ spec:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
       labels:
-        k8s.kuboard.cn/name: tencent-games
+        app: tencent-games
     spec:
       affinity:
         podAffinity:
@@ -29,7 +29,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-backend
+                    app: magnolia-public-backend
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -147,6 +147,6 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    k8s.kuboard.cn/name: tencent-games
+    app: tencent-games
   type: ClusterIP
   sessionAffinity: None

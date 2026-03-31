@@ -8,7 +8,7 @@ spec:
   minAvailable: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile 
+      app: nginx-mobile 
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -16,12 +16,12 @@ metadata:
   name: magnolia-public-mobile
   namespace: zb-schools
   labels:
-    k8s.kuboard.cn/name: nginx-mobile
+    app: nginx-mobile
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile
+      app: nginx-mobile
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -33,7 +33,7 @@ spec:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
       labels:
-        k8s.kuboard.cn/name: nginx-mobile
+        app: nginx-mobile
     spec:
       affinity:
         podAffinity:
@@ -41,7 +41,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: saas-homework-service
+                    app: saas-homework-service
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -166,9 +166,6 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    k8s.kuboard.cn/name: nginx-mobile
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: nginx-mobile
+  sessionAffinity: None
   type: ClusterIP

@@ -8,7 +8,7 @@ spec:
   minAvailable: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: saas-homework-service
+      app: saas-homework-service
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -16,7 +16,6 @@ metadata:
   annotations:
     k8s.kuboard.cn/workload: saas-homework-service
   labels:
-    k8s.kuboard.cn/name: saas-homework-service
     app: saas-homework-service
   name: saas-homework-service
   namespace: zb-schools
@@ -26,7 +25,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: saas-homework-service
+      app: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -46,14 +45,14 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/qa"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: saas-homework-service
+        app: saas-homework-service
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: k8s.kuboard.cn/name
+              - key: app
                 operator: In
                 values:
                 - magnolia-author-backend
@@ -112,4 +111,4 @@ spec:
       protocol: TCP
   type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: saas-homework-service
+    app: saas-homework-service

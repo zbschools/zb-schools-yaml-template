@@ -8,27 +8,27 @@ spec:
   minAvailable: 2
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-backend-sts
+      app: magnolia-public-backend
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   generation: 2
   labels:
-    k8s.kuboard.cn/name: magnolia-public-backend-sts
-  name: magnolia-public-backend-sts
+    app: magnolia-public-backend
+  name: magnolia-public-backend
   namespace: zb-schools
 spec:
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain
     whenScaled: Retain
   podManagementPolicy: OrderedReady
-  replicas: 1
+  replicas: 2
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-backend-sts
-  serviceName: magnolia-public-backend-sts-svc
+      app: magnolia-public-backend
+  serviceName: magnolia-public-headless-svc
   template:
     metadata:
       annotations:
@@ -43,18 +43,18 @@ spec:
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-public-backend-sts
+        app: magnolia-public-backend-sts
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: k8s.kuboard.cn/name
+              - key: app
                 operator: In
                 values:
                 - magnolia-author-backend
-                - magnolia-public-backend-sts
+                - magnolia-public-backend
                 - saas-homework-service
             topologyKey: kubernetes.io/hostname
       automountServiceAccountToken: true
@@ -147,39 +147,29 @@ metadata:
   name: magnolia-public-backend-svc
   namespace: zb-schools
 spec:
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
   ports:
     - name: public
       port: 8080
       protocol: TCP
       targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-public-backend-sts
+    app: magnolia-public-backend-sts
   sessionAffinity: None
   type: ClusterIP
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-backend-sts-svc
+  name: magnolia-public-headless-svc
   namespace: zb-schools
 spec:
   clusterIP: None
-  clusterIPs:
-  - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
   ports:
   - name: public
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    k8s.kuboard.cn/name: magnolia-public-backend-sts
+    app: magnolia-public-backend-sts
   sessionAffinity: None
   type: ClusterIP
