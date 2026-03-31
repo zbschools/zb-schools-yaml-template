@@ -16,7 +16,7 @@ metadata:
   generation: 2
   labels:
     app: magnolia-author-backend
-  name: magnolia-author-backend
+  name: magnolia-author-backend-sts
   namespace: zb-schools
 spec:
   persistentVolumeClaimRetentionPolicy:
