@@ -122,7 +122,7 @@ spec:
       resources:
         requests:
           storage: 5Gi
-      storageClassName: gp3
+      storageClassName: gp2
       volumeMode: Filesystem
 ---
 apiVersion: v1
