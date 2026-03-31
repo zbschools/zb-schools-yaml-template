@@ -43,7 +43,7 @@ spec:
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        app: magnolia-public-backend-sts
+        app: magnolia-public-backend
     spec:
       affinity:
         podAntiAffinity:
@@ -153,7 +153,7 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: magnolia-public-backend-sts
+    app: magnolia-public-backend
   sessionAffinity: None
   type: ClusterIP
 --- 
@@ -170,6 +170,6 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: magnolia-public-backend-sts
+    app: magnolia-public-backend
   sessionAffinity: None
   type: ClusterIP
