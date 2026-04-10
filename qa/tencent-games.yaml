@@ -136,7 +136,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-games-svc
+  name: tencent-games-svc
   namespace: zb-schools
 spec:
   ports:
