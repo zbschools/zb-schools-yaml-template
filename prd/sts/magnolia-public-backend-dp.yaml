@@ -1,42 +1,40 @@
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
+apiVersion: policy/v1
+kind: PodDisruptionBudget
 metadata:
-  name: pvc-public-2
+  name: magnolia-public-backend-pdb
   namespace: zb-schools
 spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: gp3-ebs
-  resources:
-    requests:
-      storage: 10Gi
----
-apiVersion: apps/v1
-kind: StatefulSet 
-metadata:
-  generation: 2
-  labels:
-    app: magnolia-public-backend
-    appn: magnolia-public-backend-2
-  name: magnolia-public-backend-2
-  namespace: zb-schools
-spec:
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Retain
-    whenScaled: Retain
-  podManagementPolicy: OrderedReady
-  replicas: 1
-  revisionHistoryLimit: 3
+  minAvailable: 2
   selector:
     matchLabels:
-      app: magnolia-public-backend
-      appn: magnolia-public-backend-2
-  serviceName: magnolia-public-backend-2-svc
+      k8s.kuboard.cn/name: magnolia-public-backend
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: magnolia-public-backend
+  labels:
+    k8s.kuboard.cn/name: magnolia-public-backend
+  name: magnolia-public-backend
+  namespace: zb-schools
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/name: magnolia-public-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       annotations:
-        kubectl.kubernetes.io/restartedAt: "2026-02-05T14:16:12+08:00"
+        karpenter.sh/do-not-disrupt: "true"
+        kubectl.kubernetes.io/restartedAt: "2024-11-19T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-config: zb-schools/kv/config
@@ -46,15 +44,12 @@ spec:
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        app: magnolia-public-backend
-        appn: magnolia-public-backend-2
+        k8s.kuboard.cn/name: magnolia-public-backend
     spec:
       containers:
         - env:
             - name: TZ
               value: CST-8
-            - name: DB_NAME_PUBLIC
-              value: mgnl_public_2
             - name: BASE_URL
               value: "https://www.zbschools.sg"
             - name: ENV_TYPE
@@ -108,13 +103,6 @@ spec:
               memory: 24Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /usr/local/tomcat/webapps/repositories
-              name: pvc-public
-      volumes:
-        - name: pvc-public
-          persistentVolumeClaim:
-             claimName: pvc-public-2
       dnsPolicy: ClusterFirst
       imagePullSecrets:
         - name: aws-ecr
@@ -128,7 +116,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-backend-2-svc
+  name: magnolia-public-backend-svc
   namespace: zb-schools
 spec:
   internalTrafficPolicy: Cluster
@@ -141,6 +129,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    appn: magnolia-public-backend-2
+    k8s.kuboard.cn/name: magnolia-public-backend
   sessionAffinity: None
   type: ClusterIP

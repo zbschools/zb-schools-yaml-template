@@ -1,23 +1,9 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: public-frontend-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-frontend
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    karpenter.sh/do-not-disrupt: "true"
-    k8s.kuboard.cn/workload: magnolia-public-frontend
   labels:
-    k8s.kuboard.cn/name: magnolia-public-frontend
+    app: magnolia-public-frontend
   name: magnolia-public-frontend
   namespace: zb-schools
 spec:
@@ -26,7 +12,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-public-frontend
+      app: magnolia-public-frontend
   strategy:
     rollingUpdate:
       maxSurge: 1 
@@ -36,10 +22,9 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T13:53:43+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-public-frontend
+        app: magnolia-public-frontend
     spec:
       affinity:
         podAffinity:
@@ -47,7 +32,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: saas-homework-service
+                    app: saas-homework-service
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -101,6 +86,12 @@ spec:
           name: volume-2hfc3
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: public-nginx-conf
+  namespace: zb-schools
 data:
   default.conf: |-
     gzip_comp_level 5;
@@ -241,12 +232,6 @@ data:
             root /usr/share/nginx/html/sit;
         }
     }
-kind: ConfigMap
-metadata:
-  annotations: {}
-  labels: {}
-  name: public-nginx-conf
-  namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
@@ -254,15 +239,13 @@ metadata:
   namespace: zb-schools
   name: magnolia-public-frontend-svc
 spec:
+  type: ClusterIP
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 80
       protocol: TCP
-  type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-public-frontend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: magnolia-public-frontend
+  sessionAffinity: None
 

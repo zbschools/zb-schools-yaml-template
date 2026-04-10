@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tencent-games 
-  namespace: zb-schools
   labels:
     app: tencent-games
+  name: tencent-games 
+  namespace: zb-schools
 spec:
   replicas: 1
   selector:
@@ -136,7 +136,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tencent-games-svc
+  name: magnolia-public-games-svc
   namespace: zb-schools
 spec:
   ports:

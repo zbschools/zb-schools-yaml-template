@@ -1,14 +1,4 @@
----
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: public-mobile-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: nginx-mobile 
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -82,6 +72,12 @@ spec:
 
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: mobile-nginx-conf
+  namespace: zb-schools
 data:
   nginx-mobile.conf: |-
     gzip on;
@@ -145,12 +141,7 @@ data:
             root   /usr/share/nginx/html-qa;
         }
     }
-kind: ConfigMap
-metadata:
-  annotations: {}
-  labels: {}
-  name: mobile-nginx-conf
-  namespace: zb-schools
+
 ---
 apiVersion: v1
 kind: Service
@@ -158,6 +149,7 @@ metadata:
   name: magnolia-public-mobile-svc
   namespace: zb-schools
 spec:
+  type: ClusterIP
   ports:
     - name: ngmobile
       port: 80
@@ -166,4 +158,3 @@ spec:
   selector:
     app: nginx-mobile
   sessionAffinity: None
-  type: ClusterIP

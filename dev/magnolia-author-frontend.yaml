@@ -2,10 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: magnolia-author-frontend
   labels:
-    k8s.kuboard.cn/name: magnolia-author-frontend
+    app: magnolia-author-frontend
   name: magnolia-author-frontend
   namespace: zb-schools
 spec:
@@ -14,7 +12,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: magnolia-author-frontend
+      app: magnolia-author-frontend
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -24,12 +22,24 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T14:15:57+08:00"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: magnolia-author-frontend
+        app: magnolia-author-frontend
     spec:
+      tolerations:
+        - key: dedicated
+          operator: Equal
+          value: mangolia-backend
+          effect: NoSchedule
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key:  dedicated
+                operator: In
+                values:
+                -  mangolia-backend
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
@@ -37,7 +47,7 @@ spec:
                   app: magnolia-author-backend
               topologyKey: kubernetes.io/hostname
       containers:
-        - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
+        - image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend:13e6620f"
           imagePullPolicy: Always
           name: magnolia-author-frontend
           ports:
@@ -75,6 +85,10 @@ spec:
           name: confd
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: author-nginx-conf
+  namespace: zb-schools
 data:
   default.conf: |-
     server {
@@ -97,12 +111,7 @@ data:
         location = /50x.html {
             root   /usr/share/nginx/html;
         }
-
     }
-kind: ConfigMap
-metadata:
-  name: author-nginx-conf
-  namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
@@ -110,11 +119,12 @@ metadata:
   namespace: zb-schools
   name: magnolia-author-frontend-svc
 spec:
+  type: ClusterIP
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 80
       protocol: TCP
-  type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: magnolia-author-frontend
+    app: magnolia-author-frontend
   sessionAffinity: None

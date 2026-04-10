@@ -1,20 +1,7 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: homework-service-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: saas-homework-service
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: saas-homework-service
   labels:
     app: saas-homework-service
   name: saas-homework-service
@@ -35,7 +22,6 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T11:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
@@ -105,10 +91,10 @@ metadata:
   namespace: zb-schools
   name: saas-homework-service-svc
 spec:
+  type: ClusterIP
   ports:
     - port: 8080
       targetPort: 8080
       protocol: TCP
-  type: ClusterIP
   selector:
     app: saas-homework-service
