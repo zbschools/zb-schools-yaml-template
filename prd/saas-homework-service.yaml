@@ -1,22 +1,9 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: homework-service-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 2
-  selector:
-    matchLabels:
-      k8s.kuboard.cn/name: saas-homework-service
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: saas-homework-service
   labels:
-    k8s.kuboard.cn/name: saas-homework-service
+    app: saas-homework-service
   name: saas-homework-service
   namespace: zb-schools
 spec:
@@ -25,17 +12,16 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: saas-homework-service
+      app: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-11-19T15:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
@@ -45,14 +31,14 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/prd"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: saas-homework-service
+        app: saas-homework-service
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                - key: k8s.kuboard.cn/name
+                - key: app
                   operator: In
                   values:
                   - magnolia-author-backend
@@ -107,10 +93,12 @@ metadata:
   namespace: zb-schools
   name: saas-homework-service-svc
 spec:
+  type: ClusterIP
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
       protocol: TCP
-  type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: saas-homework-service
+    app: saas-homework-service
+  sessionAffinity: None

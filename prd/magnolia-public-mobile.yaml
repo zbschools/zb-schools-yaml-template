@@ -1,38 +1,27 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: nginx-mobile-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 2
-  selector:
-    matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: magnolia-public-mobile
   namespace: zb-schools
   labels:
-    k8s.kuboard.cn/name: nginx-mobile
+    app: nginx-mobile
 spec:
   replicas: 3
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: nginx-mobile
+      app: nginx-mobile
   strategy:
     rollingUpdate:
       maxSurge: 2
-      maxUnavailable: 0
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
       labels:
-        k8s.kuboard.cn/name: nginx-mobile
+        app: nginx-mobile
     spec:
       affinity:
         podAffinity:
@@ -40,7 +29,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: saas-homework-service
+                    app: saas-homework-service
                 topologyKey: kubernetes.io/hostname
               weight: 100
         podAntiAffinity:
@@ -48,7 +37,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name:  nginx-mobile
+                    app:  nginx-mobile
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -86,9 +75,14 @@ spec:
                 path: default.conf
             name: mobile-nginx-conf
           name: volume-conf
-
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: mobile-nginx-conf
+  namespace: zb-schools
 data:
   nginx-mobile.conf: |-
     gzip on;
@@ -154,12 +148,6 @@ data:
         }
 
     }
-kind: ConfigMap
-metadata:
-  annotations: {}
-  labels: {}
-  name: mobile-nginx-conf
-  namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
@@ -167,15 +155,12 @@ metadata:
   name: magnolia-public-mobile-svc
   namespace: zb-schools
 spec:
+  type: ClusterIP
   ports:
-    - name: ngmobile
+    - name: http
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
-    k8s.kuboard.cn/name: nginx-mobile
-  type: ClusterIP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: nginx-mobile
+  sessionAffinity: None

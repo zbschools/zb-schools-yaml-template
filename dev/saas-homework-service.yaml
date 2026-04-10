@@ -2,12 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: saas-homework-service
-    appn: saas-homework-service
   labels:
-    k8s.kuboard.cn/name: saas-homework-service
-    appn: saas-homework-service
+    app: saas-homework-service
   name: saas-homework-service
   namespace: zb-schools
 spec:
@@ -16,8 +12,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: saas-homework-service
-      appn: saas-homework-service
+      app: saas-homework-service
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -27,7 +22,6 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T11:46:16+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "sph-zb-schools-cms-vault-reader"
         vault.hashicorp.com/agent-inject-secret-db-config: "zb-schools/db/creds/zb-schools-db-role"
@@ -37,8 +31,7 @@ spec:
         vault.hashicorp.com/namespace: "admin/engr/zb_schools/dev"
       creationTimestamp: null
       labels:
-        k8s.kuboard.cn/name: saas-homework-service
-        appn: saas-homework-service
+        app: saas-homework-service
     spec:
       affinity:
         podAntiAffinity:
@@ -50,6 +43,7 @@ spec:
                   values:
                   - magnolia-author-backend
                   - magnolia-public-backend
+                  - saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
         - command:
@@ -99,10 +93,11 @@ metadata:
   namespace: zb-schools
   name: saas-homework-service-svc
 spec:
+  type: ClusterIP
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
       protocol: TCP
-  type: ClusterIP
   selector:
-    k8s.kuboard.cn/name: saas-homework-service
+    app: saas-homework-service

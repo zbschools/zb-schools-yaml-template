@@ -1,20 +1,7 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: magnolia-author-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 1
-  selector:
-    matchLabels:
-      app: magnolia-author-frontend
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    k8s.kuboard.cn/workload: magnolia-author-frontend
   labels:
     app: magnolia-author-frontend
   name: magnolia-author-frontend
@@ -35,7 +22,6 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2024-06-26T14:15:57+08:00"
       creationTimestamp: null
       labels:
         app: magnolia-author-frontend
@@ -45,7 +31,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app: magnolia-author-backend-sts
+                  app: magnolia-author-backend
               topologyKey: kubernetes.io/hostname
       containers:
         - image: "905418451605.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-author-frontend"
@@ -90,6 +76,10 @@ spec:
           name: confd
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: author-nginx-conf
+  namespace: zb-schools
 data:
   default.conf: |-
     server {
@@ -97,11 +87,9 @@ data:
         listen  [::]:80;
         server_name  localhost;
         client_max_body_size 1000M;
-        access_log /mnt/access.log main;
-        error_log /mnt/error.log warn;
 
          location / {
-            root /usr/share/nginx/html/qa;
+            root /usr/share/nginx/html/;
             index  index.html;
             client_max_body_size 1000m;
             try_files $uri $uri/ /authorFrontend/index.html @rewrites;
@@ -114,12 +102,7 @@ data:
         location = /50x.html {
             root   /usr/share/nginx/html;
         }
-
     }
-kind: ConfigMap
-metadata:
-  name: author-nginx-conf
-  namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
@@ -127,11 +110,12 @@ metadata:
   namespace: zb-schools
   name: magnolia-author-frontend-svc
 spec:
+  type: ClusterIP
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 80
       protocol: TCP
-  type: ClusterIP
   selector:
     app: magnolia-author-frontend
   sessionAffinity: None

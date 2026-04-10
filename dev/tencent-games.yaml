@@ -5,12 +5,12 @@ metadata:
   name: tencent-games 
   namespace: zb-schools
   labels:
-    k8s.kuboard.cn/name: tencent-games
+    app: tencent-games
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s.kuboard.cn/name: tencent-games
+      app: tencent-games
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,7 +21,7 @@ spec:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
       labels:
-        k8s.kuboard.cn/name: tencent-games
+        app: tencent-games
     spec:
       affinity:
         podAffinity:
@@ -29,7 +29,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    k8s.kuboard.cn/name: magnolia-public-backend
+                    app: magnolia-public-backend
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -70,41 +70,14 @@ spec:
 
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: tencent-games-nginx-conf
+  namespace: zb-schools
 data:
   nginx-tencent-games.conf: |-
-    gzip on;
-    gzip_comp_level 5;
-    gzip_min_length 3;
-    gzip_proxied any;
-    gzip_vary on;
-    gzip_types
-       application/atom+xml
-       application/javascript
-       application/json
-       application/ld+json
-       application/manifest+json
-       application/rss+xml
-       application/vnd.geo+json
-       application/vnd.ms-fontobject
-       application/x-font-ttf
-       application/x-web-app-manifest+json
-       application/xhtml+xml
-       application/xml
-       application/octet-stream
-       font/opentype
-       image/bmp
-       image/png
-       image/svg+xml
-       image/x-icon
-       text/cache-manifest
-       text/css
-       text/plain
-       text/vcard
-       text/vnd.rim.location.xloc
-       text/vtt
-       text/x-component
-       text/x-cross-domain-policy;
-    proxy_max_temp_file_size 1024m;
     server {
         listen      80;
         listen [::]:80;
@@ -126,12 +99,6 @@ data:
             root   /usr/share/nginx/html;
         }
     }
-kind: ConfigMap
-metadata:
-  annotations: {}
-  labels: {}
-  name: tencent-games-nginx-conf
-  namespace: zb-schools
 ---
 apiVersion: v1
 kind: Service
@@ -139,15 +106,12 @@ metadata:
   name: magnolia-public-games-svc
   namespace: zb-schools
 spec:
+  type: ClusterIP
   ports:
-    - name: ngames
+    - name: http
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
-    k8s.kuboard.cn/name: tencent-games
-  type: ClusterIP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400
+    app: tencent-games
+  sessionAffinity: None

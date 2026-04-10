@@ -1,15 +1,4 @@
 ---
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: magnolia-public-backend-pdb
-  namespace: zb-schools
-spec:
-  minAvailable: 2
-  selector:
-    matchLabels:
-      app: magnolia-public-backend
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -23,17 +12,16 @@ spec:
     whenDeleted: Retain
     whenScaled: Retain
   podManagementPolicy: OrderedReady
-  replicas: 2
+  replicas: 3
   revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: magnolia-public-backend
-  serviceName: magnolia-public-headless-svc
+  serviceName: magnolia-public-backend-headless
   template:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2025-11-07T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
@@ -147,6 +135,7 @@ metadata:
   name: magnolia-public-backend-svc
   namespace: zb-schools
 spec:
+  type: ClusterIP
   ports:
     - name: public
       port: 8080
@@ -155,12 +144,12 @@ spec:
   selector:
     app: magnolia-public-backend
   sessionAffinity: None
-  type: ClusterIP
+
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-headless-svc
+  name: magnolia-public-backend-headless
   namespace: zb-schools
 spec:
   clusterIP: None
@@ -171,5 +160,3 @@ spec:
     targetPort: 8080
   selector:
     app: magnolia-public-backend
-  sessionAffinity: None
-  type: ClusterIP

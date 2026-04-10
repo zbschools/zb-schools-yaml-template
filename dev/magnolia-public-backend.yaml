@@ -4,8 +4,8 @@ kind: StatefulSet
 metadata:
   generation: 2
   labels:
-    app: magnolia-public-backend-sts
-  name: magnolia-public-backend-sts
+    app: magnolia-public-backend
+  name: magnolia-public-backend
   namespace: zb-schools
 spec:
   persistentVolumeClaimRetentionPolicy:
@@ -16,13 +16,12 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: magnolia-public-backend-sts
-  serviceName: magnolia-public-backend-sts-svc
+      app: magnolia-public-backend
+  serviceName: magnolia-public-backend-headless
   template:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
-        kubectl.kubernetes.io/restartedAt: "2025-11-07T17:16:12+08:00"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-db-config: zb-schools/db/creds/zb-schools-db-role
         vault.hashicorp.com/agent-inject-secret-kv-aksk: zb-schools/kv/aksk
@@ -32,7 +31,7 @@ spec:
         vault.hashicorp.com/role: sph-zb-schools-cms-vault-reader
       creationTimestamp: null
       labels:
-        app: magnolia-public-backend-sts
+        app: magnolia-public-backend
     spec:
       affinity:
         podAntiAffinity:
@@ -43,7 +42,7 @@ spec:
                 operator: In
                 values:
                 - magnolia-author-backend
-                - magnolia-public-backend-sts
+                - magnolia-public-backend
                 - saas-homework-service
             topologyKey: kubernetes.io/hostname
       automountServiceAccountToken: true
@@ -57,8 +56,6 @@ spec:
           value: sit
         - name: INSTANCE_TYPE
           value: magnoliaPublic
-        - name: DB_NAME_PUBLIC
-          value: mgnl_public_1
         image: "767397694429.dkr.ecr.ap-southeast-1.amazonaws.com/sph/magnolia-public-backend"
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -105,7 +102,7 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /usr/local/tomcat/webapps/repositories
-          name: pvc-mgnl-public
+          name: pvc-public
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -122,7 +119,7 @@ spec:
     kind: PersistentVolumeClaim
     metadata:
       creationTimestamp: null
-      name: pvc-mgnl-public
+      name: pvc-public
     spec:
       accessModes:
       - ReadWriteOnce
@@ -138,39 +135,27 @@ metadata:
   name: magnolia-public-backend-svc
   namespace: zb-schools
 spec:
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
+  type: ClusterIP
   ports:
-    - name: public
+    - name: http
       port: 8080
       protocol: TCP
       targetPort: 8080
   selector:
-    app: magnolia-public-backend-sts
+    app: magnolia-public-backend
   sessionAffinity: None
-  type: ClusterIP
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: magnolia-public-backend-sts-svc
+  name: magnolia-public-backend-headless
   namespace: zb-schools
 spec:
-  clusterIP: None
-  clusterIPs:
-  - None
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
+  clusterIP: None  
   ports:
   - name: public
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: magnolia-public-backend-sts
-  sessionAffinity: None
-  type: ClusterIP
+    app: magnolia-public-backend

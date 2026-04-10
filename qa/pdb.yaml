@@ -1,0 +1,73 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-author-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: magnolia-author-backend
+      
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: author-frontend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: magnolia-author-frontend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: magnolia-public-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: magnolia-public-backend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: public-frontend-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: magnolia-public-frontend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: public-mobile-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: nginx-mobile 
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: homework-service-pdb
+  namespace: zb-schools
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: saas-homework-service
+
+
+
+
+
+
