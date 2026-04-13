@@ -38,26 +38,8 @@ spec:
           operator: Equal
           value: mangolia-backend
           effect: NoSchedule
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key:  dedicated
-                operator: In
-                values:
-                -  mangolia-backend
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - magnolia-public-backend
-                  - magnolia-author-backend
-                  - saas-homework-service
-              topologyKey: kubernetes.io/hostname
+      nodeSelector:
+        dedicated: "mangolia-backend"
       containers:
         - env:
             - name: TZ
