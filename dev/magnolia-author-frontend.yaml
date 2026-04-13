@@ -31,15 +31,9 @@ spec:
           operator: Equal
           value: mangolia-backend
           effect: NoSchedule
+      nodeSelector:
+        dedicated: "mangolia-backend"
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key:  dedicated
-                operator: In
-                values:
-                -  mangolia-backend
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
