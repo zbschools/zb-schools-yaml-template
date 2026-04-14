@@ -26,14 +26,17 @@ spec:
         app: magnolia-public-frontend
     spec:
       affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app: saas-homework-service
-                topologyKey: kubernetes.io/hostname
-              weight: 100
+        affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - magnolia-public-backend
+                - saas-homework-service
+            topologyKey: kubernetes.io/hostname
       containers:
         - command:
             - bash

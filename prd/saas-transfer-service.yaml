@@ -32,15 +32,6 @@ spec:
       labels:
         app: saas-transfer-service
     spec:
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app: saas-homework-service
-                topologyKey: kubernetes.io/hostname
-              weight: 100
       containers:
         - command:
             - /bin/bash

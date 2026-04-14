@@ -29,7 +29,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app: magnolia-public-backend
+                    app: magnolia-public-frontend
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:

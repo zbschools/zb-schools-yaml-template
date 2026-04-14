@@ -26,6 +26,13 @@ spec:
       labels:
         app: magnolia-author-frontend
     spec:
+      tolerations:
+        - key: dedicated
+          operator: Equal
+          value: mangolia-backend
+          effect: NoSchedule
+      nodeSelector:
+        dedicated: "mangolia-backend"
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
