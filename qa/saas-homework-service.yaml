@@ -41,7 +41,6 @@ spec:
               - key: app
                 operator: In
                 values:
-                - magnolia-author-backend
                 - magnolia-public-backend
             topologyKey: kubernetes.io/hostname
       containers:

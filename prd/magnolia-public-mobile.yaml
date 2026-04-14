@@ -29,7 +29,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app: saas-homework-service
+                    app: magnolia-public-frontend
                 topologyKey: kubernetes.io/hostname
               weight: 100
         podAntiAffinity:

@@ -26,6 +26,13 @@ spec:
       labels:
         app: magnolia-author-frontend
     spec:
+      tolerations:
+        - key: dedicated
+          operator: Equal
+          value: mangolia-backend
+          effect: NoSchedule
+      nodeSelector:
+        dedicated: "mangolia-backend"
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -89,7 +96,7 @@ data:
         client_max_body_size 1000M;
 
          location / {
-            root /usr/share/nginx/html/;
+            root /usr/share/nginx/html/qa;
             index  index.html;
             client_max_body_size 1000m;
             try_files $uri $uri/ /authorFrontend/index.html @rewrites;
