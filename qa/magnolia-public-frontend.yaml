@@ -26,7 +26,6 @@ spec:
         app: magnolia-public-frontend
     spec:
       affinity:
-        affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
