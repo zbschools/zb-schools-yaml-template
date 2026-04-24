@@ -5,15 +5,15 @@ metadata:
   name: magnolia-public-mobile
   namespace: zb-schools
   labels:
-    app: nginx-mobile
+    app: public-mobile
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx-mobile
+      app: public-mobile
   strategy:
     rollingUpdate:
-      maxSurge: 2
+      maxSurge: 1
       maxUnavailable: 1
     type: RollingUpdate
   template:
@@ -21,7 +21,7 @@ spec:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
       labels:
-        app: nginx-mobile
+        app: public-mobile
     spec:
       affinity:
         podAffinity:
@@ -37,7 +37,7 @@ spec:
             - podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app:  nginx-mobile
+                    app: public-mobile
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -71,9 +71,9 @@ spec:
         - configMap:
             defaultMode: 420
             items:
-              - key: nginx-mobile.conf
+              - key: public-mobile.conf
                 path: default.conf
-            name: mobile-nginx-conf
+            name: public-mobile-conf
           name: volume-conf
 ---
 apiVersion: v1
@@ -81,10 +81,10 @@ kind: ConfigMap
 metadata:
   annotations: {}
   labels: {}
-  name: mobile-nginx-conf
+  name: public-mobile-conf
   namespace: zb-schools
 data:
-  nginx-mobile.conf: |-
+  public-mobile.conf: |-
     gzip on;
     gzip_comp_level 5;
     gzip_min_length 3;
@@ -162,5 +162,5 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    app: nginx-mobile
+    app: public-mobile
   sessionAffinity: None
