@@ -49,6 +49,7 @@ spec:
                   operator: In
                   values:
                   - magnolia-public-backend
+                  - magnolia-public-frontend
                   - saas-homework-service
               topologyKey: kubernetes.io/hostname
       containers:
